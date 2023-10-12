@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Health and Wellness </title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/icon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  
+</head>
+
+<body>
+ 
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container">
+      <div class="header-container d-flex align-items-center justify-content-between">
+        <div class="logo">
+          <h1 class="text-light"><a href="index.html"><span style="font-family: roboto;">Health and Wellness</span></a></h1>
+          <!-- Uncomment below if you prefer to use an image logo -->
+          <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+        </div>
+
+        <nav id="navbar" class="navbar">
+          <ul>
+            <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+            <li><a class="nav-link scrollto" href="#about">About</a></li>
+
+              <ul>
+   
+                </li>
+                
+              </ul>
+            </li>
+            
+            <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+           
+            <a href="#" id="openModalLink">Open BMI Calculator</a>
+            <div id="modal">
+            <form action="bmi.php" method="post">
+              <button id="closeModal">X</button>
+              <h1>BMI Calculator</h1>
+              <label for="weight">Weight (kg): </label>
+              <input type="number" id="weight" step="0.01"><br>
+              <label for="height">Height (cm): </label>
+              <input type="number" id="height"><br>
+              <label for="age">Age: </label>
+              <input type="number" id="age"><br>
+              <button id="calculate">Calculate BMI</button>
+              <h2 id="result"></h2>
+            </form>
+            </div>
+            <script>
+              const openModalLink = document.getElementById("openModalLink");
+              const modal = document.getElementById("modal");
+              const closeModalButton = document.getElementById("closeModal");
+              const calculateButton = document.getElementById("calculate");
+              const weightInput = document.getElementById("weight");
+              const heightInput = document.getElementById("height");
+              const ageInput = document.getElementById("age");
+              const resultElement = document.getElementById("result");
+            
+              openModalLink.addEventListener("click", () => {
+                modal.style.display = "block";
+              });
+            
+              closeModalButton.addEventListener("click", () => {
+                modal.style.display = "none";
+              });
+            
+              calculateButton.addEventListener("click", calculateBMI);
+            
+              function calculateBMI() {
+                const weight = parseFloat(weightInput.value);
+                const height = parseFloat(heightInput.value) / 100; // Convert cm to meters
+                const age = parseInt(ageInput.value);
+                
+                if (isNaN(weight) || isNaN(height) || isNaN(age) || height <= 0) {
+                  resultElement.textContent = "Please enter valid values.";
+                  return;
+                }
+                
+                const bmi = weight / (height * height);
+                const category = getBMICategory(bmi);
+                resultElement.textContent = `Your BMI: ${bmi.toFixed(2)} - ${category}`;
+              }
+            
+              function getBMICategory(bmi) {
+                if (bmi < 18.5) {
+                  return "Underweight";
+                } else if (bmi < 24.9) {
+                  return "Normal Weight";
+                } else if (bmi < 29.9) {
+                  return "Overweight";
+                } else {
+                  return "Obese";
+                }
+              }
+            </script>
+          </ul>
+          <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
+
+      </div><!-- End Header Container -->
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex align-items-center">
+    <div class="container text-center position-relative" data-aos="fade-in" data-aos-delay="200">
+      <h1 style="font-family: roboto">Your Online Health and Wellness Consultant </h1>
+      <h2 style="font-family: roboto;">We are team of talented Health Experts</h2>
+      <a href="Login22.html" class="btn-get-started scrollto">Get Started</a>
+    </div>
+  </section><!-- End Hero -->
+
+  <main id="main">
+
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about">
+      <div class="container">
+
+        <div class="row content">
+          <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
+            <h2>This is all about your health and lifestyle </h2>
+            <h3>Here, We are capable of changing your lifestyle </h3>
+          </div>
+          <div class="col-lg-6 pt-4 pt-lg-0" data-aos="fade-left" data-aos-delay="200">
+            <p>
+             Lets improve your life routine:
+            </p>
+            <ul>
+              <ol>
+              <li><i class="ri-check-double-line"></i> Improve your lifestyle and wellness </li>
+              <li><i class="ri-check-double-line"></i> Provide you a health and recommendations</li>
+              <li><i class="ri-check-double-line"></i> Make you a healthy and fit being</li>
+            </ol>
+            </ul>
+            <p class="fst-italic">
+              We are here to hep improvve and maintain your health well being.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End About Section -->
+<!-- End About Section -->
+
+    <!-- ======= Counts Section ======= -->
+    <section id="counts" class="counts">
+      <div class="container">
+
+        <div class="row counters">
+
+          <div class="col-lg-3 col-6 text-center">
+            
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Counts Section -->
+
+    <!-- ======= Why Us Section ======= -->
+    <section id="why-us" class="why-us">
+      <div class="container">
+
+        <div class="row">
+          <div class="col-lg-4 d-flex align-items-stretch" data-aos="fade-right">
+            <div class="content">
+              <h3>Why you should choose our system?</h3>
+              <p>
+                We help you achieve your personal health goal.
+              </p>
+              <div class="text-center">
+                <a href="#" class="more-btn">Learn More <i class="bx bx-chevron-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8 d-flex align-items-stretch">
+            <div class="icon-boxes d-flex flex-column justify-content-center">
+              <div class="row">
+                <div class="col-xl-4 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+                  <div class="icon-box mt-4 mt-xl-0">
+                    <i class="bx bx-receipt"></i>
+                    <h4>Be more active</h4>
+                    <p>It helps you become more passionate achieveiing your health goals.</p>
+                  </div>
+                </div>
+                <div class="col-xl-4 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="200">
+                  <div class="icon-box mt-4 mt-xl-0">
+                    <i class="bx bx-cube-alt"></i>
+                    <h4>Time Management</h4>
+                    <p>It helps you to adopt time managemnt practices</p>
+                  </div>
+                </div>
+                <div class="col-xl-4 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="300">
+                  <div class="icon-box mt-4 mt-xl-0">
+                    <i class="bx bx-images"></i>
+                    <h4>It reduces stress hormones </h4>
+                    <p>By doing some set of workouts it helps you to reduce stress and enhnace your mood.</p>
+                  </div>
+                </div>
+              </div>
+            </div><!-- End .content-->
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Why Us Section -->
+
+      <!-- ======= Cta Section ======= -->
+      <section id="cta" class="cta">
+        <div class="container">
+  
+          <div class="text-center" data-aos="zoom-in">
+            <h3>Call To Action</h3>
+            <p> Welcome to our revolutionary web-based Health and Wellness Expert System, designed to empower you on your journey to optimal well-being. Imagine having a virtual expert at your fingertips, guiding you with tailored advice and actionable steps for a healthier, happier you.</p>
+           
+            <a class="cta-btn" href="#">Call To Action</a>
+          </div>
+  
+        </div>
+      </section><!-- End Cta Section -->
+  
+      
+
+  
+    
+
+    
+
+    <!-- ======= Team Section ======= -->
+    <section id="team" class="team">
+      <div class="container">
+
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="section-title" data-aos="fade-right">
+              <h2>Team</h2>
+              <p>We are a group of studdents.</p>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="row">
+
+              <div class="col-lg-6">
+                <div class="member" data-aos="zoom-in" data-aos-delay="100">
+                  <div class="pic"><img src="" class="img-fluid" alt=""></div>
+                  <div class="member-info">
+                    <h4>Raymond Lopez</h4>
+                    <span>Developer</span>
+                    <p>Studied at Partido State University</p>
+                    <div class="social">
+                      <a href=""><i class="ri-twitter-fill"></i></a>
+                      <a href=""><i class="ri-facebook-fill"></i></a>
+                      <a href=""><i class="ri-instagram-fill"></i></a>
+                      <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6 mt-4 mt-lg-0">
+                <div class="member" data-aos="zoom-in" data-aos-delay="200">
+                  <div class="pic"><img src="" class="img-fluid" alt=""></div>
+                  <div class="member-info">
+                    <h4>Gerald Villar </h4>
+                    <span>Developer </span>
+                    <p>Studied at Partido State University</p>
+                    <div class="social">
+                      <a href=""><i class="ri-twitter-fill"></i></a>
+                      <a href=""><i class="ri-facebook-fill"></i></a>
+                      <a href=""><i class="ri-instagram-fill"></i></a>
+                      <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6 mt-4">
+                <div class="member" data-aos="zoom-in" data-aos-delay="300">
+                  <div class="pic"><img src="" class="img-fluid" alt=""></div>
+                  <div class="member-info">
+                    <h4>Arabela Del Valle</h4>
+                    <span>Developer</span>
+                    <p>Studied at Partido State University</p>
+                    <div class="social">
+                      <a href=""><i class="ri-twitter-fill"></i></a>
+                      <a href=""><i class="ri-facebook-fill"></i></a>
+                      <a href=""><i class="ri-instagram-fill"></i></a>
+                      <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6 mt-4">
+                <div class="member" data-aos="zoom-in" data-aos-delay="400">
+                  <div class="pic"><img src="" class="img-fluid" alt=""></div>
+                  <div class="member-info">
+                    <h4>RJ Abio </h4>
+                    <span>Advisor</span>
+                    <p>Works at Partido State University</p>
+                    <div class="social">
+                      <a href=""><i class="ri-twitter-fill"></i></a>
+                      <a href=""><i class="ri-facebook-fill"></i></a>
+                      <a href=""><i class="ri-instagram-fill"></i></a>
+                      <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Team Section -->
+
+    <!-- ======= Contact Section ======= -->
+    <section id="contact" class="contact">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4" data-aos="fade-right">
+            <div class="section-title">
+              <h2>Contact</h2>
+              <p></p>
+            </div>
+          </div>
+
+          <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
+            <iframe style="border:0; width: 100%; height: 270px;" src="http://www.maplandia.com/philippines/region-5/camarines-sur/goa/" title="google satellite map of Goa"><img src="http://www.maplandia.com/images/icon.gif" width="88" height="31" border="0" alt="Goa google map"/></a>" frameborder="0" allowfullscreen></iframe>
+            <div class="info mt-4">
+              <i class="bi bi-geo-alt"></i>
+              <h4>Location:</h4>
+              <p>San Juan Evangelista Street, Goa Camarines Sur</p>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 mt-4">
+                <div class="info">
+                  <i class="bi bi-envelope"></i>
+                  <h4>Email:</h4>
+                  <p>info@example.com</p>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="info w-100 mt-4">
+                  <i class="bi bi-phone"></i>
+                  <h4>Call:</h4>
+                  <p>+1 5589 55488 55s</p>
+                </div>
+              </div>
+            </div>
+
+            <form action="forms/contact.php" method="post" role="form" class="php-email-form mt-4">
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                </div>
+                <div class="col-md-6 form-group mt-3 mt-md-0">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                </div>
+              </div>
+              <div class="form-group mt-3">
+                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+              </div>
+              <div class="form-group mt-3">
+                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+              </div>
+              <div class="my-3">
+                <div class="loading">Loading</div>
+                <div class="error-message"></div>
+                <div class="sent-message">Your message has been sent. Thank you!</div>
+              </div>
+              <div class="text-center"><button type="submit">Send Message</button></div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h3>Heath and Wellness</h3>
+            <p>
+              Goa, camarines-sur <br>
+              San Juan Evangelista Street<br>
+              philippines<br><br>
+              <strong>Phone:</strong> +1 5589 55488 55<br>
+              <strong>Email:</strong> info@example.com<br>
+            </p>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+            </ul>
+          </div>
+
+         
+
+          <div class="col-lg-4 col-md-6 footer-newsletter">
+            <h4 style="color: teal;">Join Our Newsletter</h4>
+            <p style="color: teal">Send Us your message </p>
+            <form action="" method="post">
+              <input type="email" name="email"><input type="submit" value="Subscribe">
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container d-md-flex py-4">
+
+      <div class="me-md-auto text-center text-md-start">
+        <div class="copyright">
+          &copy; Copyright <strong><span>Health and Wellness</span></strong>. All Rights Reserved 2023
+        </div>
+        <div class="credits">
+          <!-- All the links in the footer should remain intact. -->
+          <!-- You can delete the links only if you purchased the pro version. -->
+          <!-- Licensing information: https://bootstrapmade.com/license/ -->
+          <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/bethany-free-onepage-bootstrap-theme/ -->
+          Designed by <a href="https://web.facebook.com/GeraldJean.villar.34">Gerald Villar</a>
+        </div>
+      </div>
+      <div class="social-links text-center text-md-right pt-3 pt-md-0">
+        <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+        <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+        <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+        <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

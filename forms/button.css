@@ -1,0 +1,17 @@
+gsap.to(button, {
+    keyframes: [{
+        '--text-opacity': 0,
+        '--border-radius': 0,
+        '--left-wing-background': getVar('--primary-darkest'),
+        '--left-wing-background': getVar('--primary-darkest'),
+        duration: .1
+    }, {
+        '--left-wing-background': getVar('--primary'), 
+        '--right-wing-background': getVar('--primary'),
+        duration: .1
+    }, {
+        '--left-body-background': getVar('--primary-dark'), 
+        '--right-body-background': getVar('--primary-darkest'),
+        duration: .4
+    }]
+})

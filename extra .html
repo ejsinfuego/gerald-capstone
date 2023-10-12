@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMI Calculator</title>
+</head>
+<body>
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-sm-3">
+            <h6 class="mb-0">Age</h6>
+          </div>
+          <div class="col-sm-9 text-secondary">
+            <input type="text" id="age" class="form-control" value="" oninput="calculateBMI()">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-3">
+            <h6 class="mb-0">Height (m)</h6>
+          </div>
+          <div class="col-sm-9 text-secondary">
+            <input type="text" id="height" class="form-control" value="" oninput="calculateBMI()">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-3">
+            <h6 class="mb-0">Weight (kg)</h6>
+          </div>
+          <div class="col-sm-9 text-secondary">
+            <input type="text" id="weight" class="form-control" value="" oninput="calculateBMI()">
+          </div>
+        </div>
+        <div class="status">
+          <label for="myInput">Choose your BMI Status:</label>
+          <input list="status" id="myInput" name="status">
+        </div>
+        <datalist id="status">
+          <option value="Normal">
+          <option value="Underweight">
+          <option value="Obese">
+          <option value="Overweight">
+          <option value="Healthy">
+        </datalist>
+        <div class="row">
+          <div class="col-sm-3"></div>
+          <div class="col-sm-9 text-secondary">
+            <input type="button" class="btn btn-primary px-4" value="Update" onclick="calculateBMI()">
+            <input type="button" class="btn btn-primary px-4 delete-button" value="Cancel">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3"></div>
+          <div class="col-sm-9 text-secondary">
+            <p id="bmiResult">BMI: </p>
+            <p id="bmiStatus">Status: </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function calculateBMI() {
+      var weight = parseFloat(document.getElementById('weight').value);
+      var height = parseFloat(document.getElementById('height').value);
+      var bmi = weight / (height * height);
+      
+      var selectedStatus = "";
+      if (bmi < 18.5) {
+        selectedStatus = "Underweight";
+      } else if (bmi < 24.9) {
+        selectedStatus = "Normal";
+      } else if (bmi < 29.9) {
+        selectedStatus = "Overweight";
+      } else {
+        selectedStatus = "Obese";
+      }
+      
+      document.getElementById('bmiResult').innerHTML = 'BMI: ' + bmi.toFixed(2);
+      document.getElementById('bmiStatus').innerHTML = 'Status: ' + selectedStatus;
+    }
+  </script>
+</body>
+</html>

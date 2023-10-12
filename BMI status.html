@@ -1,0 +1,47 @@
+<style>
+    .container {
+        display: flex;
+        align-items: center;
+        height: 40px; /* Adjust this value as needed */
+    }
+
+    label {
+        margin-right: 10px;
+    }
+
+    #myInput {
+        width: 150px; /* Adjust this value as needed */
+    }
+
+    #status {
+        max-height: 100px; /* Adjust this value as needed */
+        overflow-y: auto;
+    }
+
+    /* Media query for smaller screens */
+    @media (max-width: 768px) {
+        .container {
+            flex-direction: column;
+            height: auto;
+        }
+
+        label {
+            margin-right: 0;
+            margin-bottom: 5px;
+        }
+    }
+</style>
+
+<div class="container">
+    <label for="myInput">Choose your BMI Status:</label>
+    <input list="status" id="myInput" name="status">
+</div>
+
+<datalist id="status">
+    <option value="Normal">
+    <option value="Underweight">
+    <option value="Obese">
+    <option value="Overweight">
+    <option value="Healthy">
+    <!-- Add more options as needed -->
+</datalist>

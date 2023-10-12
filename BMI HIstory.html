@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Web App</title>
+    <style>
+       /* Style for the BMI Calculator Popup */
+#modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    text-align: center;
+}
+
+#modal h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+#modal label {
+    font-weight: bold;
+}
+
+#modal input {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+#modal button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#modal button:hover {
+    background-color: #0056b3;
+}
+
+/* Style for the BMI History Popup */
+#historyModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    text-align: center;
+}
+
+#historyModal h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+#historyModal ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+}
+
+#historyModal li {
+    margin-bottom: 5px;
+}
+
+#historyModal button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+#historyModal button:hover {
+    background-color: #c82333;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Navigation Link to Open BMI Calculator Popup -->
+    <a href="#" id="openModalLink">Open BMI Calculator</a>
+
+    <!-- Popup Container for BMI Calculator -->
+    <div id="modal" style="display: none;">
+        <button id="closeModal">X</button>
+        <h1>BMI Calculator</h1>
+        <label for="weight">Weight (kg): </label>
+        <input type="number" id="weight" step="0.01"><br>
+        <label for="height">Height (cm): </label>
+        <input type="number" id="height"><br>
+        <label for="age">Age: </label>
+        <input type="number" id="age"><br>
+        <button id="calculate">Calculate BMI</button>
+        <h2 id="result"></h2>
+    </div>
+
+    <!-- Button to Open BMI History Popup -->
+    <a href="#" id="openHistoryLink">Open BMI History</a>
+
+    <!-- Popup Container for BMI History -->
+    <div id="historyModal" style="display: none;">
+        <button id="closeHistoryModal">X</button>
+        <h1>BMI History</h1>
+        <ul id="historyList"></ul>
+        <button id="clearHistory">Clear BMI History</button>
+    </div>
+
+    <script>
+        const openModalLink = document.getElementById("openModalLink");
+        const modal = document.getElementById("modal");
+        const closeModalButton = document.getElementById("closeModal");
+        const calculateButton = document.getElementById("calculate");
+        const weightInput = document.getElementById("weight");
+        const heightInput = document.getElementById("height");
+        const ageInput = document.getElementById("age");
+        const resultElement = document.getElementById("result");
+        
+        const openHistoryLink = document.getElementById("openHistoryLink");
+        const historyModal = document.getElementById("historyModal");
+        const closeHistoryModalButton = document.getElementById("closeHistoryModal");
+        const historyList = document.getElementById("historyList");
+        const clearHistoryButton = document.getElementById("clearHistory");
+
+        openModalLink.addEventListener("click", () => {
+            modal.style.display = "block";
+        });
+
+        closeModalButton.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+
+        calculateButton.addEventListener("click", calculateBMI);
+
+        openHistoryLink.addEventListener("click", () => {
+            historyModal.style.display = "block";
+            loadBMIHistory();
+        });
+
+        closeHistoryModalButton.addEventListener("click", () => {
+            historyModal.style.display = "none";
+        });
+
+        clearHistoryButton.addEventListener("click", clearHistory);
+
+        function calculateBMI() {
+            const weight = parseFloat(weightInput.value);
+            const height = parseFloat(heightInput.value) / 100; // Convert cm to meters
+            const age = parseInt(ageInput.value);
+            
+            if (isNaN(weight) || isNaN(height) || isNaN(age) || height <= 0) {
+                resultElement.textContent = "Please enter valid values.";
+                return;
+            }
+            
+            const bmi = weight / (height * height);
+            const category = getBMICategory(bmi);
+            resultElement.textContent = `Your BMI: ${bmi.toFixed(2)} - ${category}`;
+
+            // Store BMI record in localStorage
+            storeBMIRecord(weight, height, age, bmi, category);
+        }
+
+        function getBMICategory(bmi) {
+            if (bmi < 18.5) {
+                return "Underweight";
+            } else if (bmi < 24.9) {
+                return "Normal Weight";
+            } else if (bmi < 29.9) {
+                return "Overweight";
+            } else {
+                return "Obese";
+            }
+        }
+
+        function storeBMIRecord(weight, height, age, bmi, category) {
+            const record = { weight, height, age, bmi, category };
+            const history = getBMIHistory();
+            history.push(record);
+            localStorage.setItem("bmiHistory", JSON.stringify(history));
+        }
+
+        function getBMIHistory() {
+            const historyJSON = localStorage.getItem("bmiHistory");
+            return JSON.parse(historyJSON) || [];
+        }
+
+        function loadBMIHistory() {
+            const history = getBMIHistory();
+            historyList.innerHTML = "";
+            history.forEach((record, index) => {
+                const listItem = document.createElement("li");
+                listItem.textContent = `Record ${index + 1}: Weight: ${record.weight}kg, Height: ${record.height}cm, Age: ${record.age}, BMI: ${record.bmi.toFixed(2)}, Category: ${record.category}`;
+                historyList.appendChild(listItem);
+            });
+        }
+
+        function clearHistory() {
+            localStorage.removeItem("bmiHistory");
+            loadBMIHistory();
+        }
+    </script>
+</body>
+</html>
