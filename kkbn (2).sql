@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 26, 2023 at 07:52 AM
+-- Generation Time: Oct 26, 2023 at 08:36 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -43,7 +43,9 @@ CREATE TABLE `achievement` (
 INSERT INTO `achievement` (`id`, `user_id`, `achievement_name`, `description`, `completion_date`, `goal_id`) VALUES
 (1, 4, 'workout', 'Jogging\n01:00:00\nlow', '0000-00-00', 0),
 (6, 2, 'meal', 'breakfast\n3 slices Raisin wheat bread \r\n2 pcs scrambled egg coffee with sugar ', '2023-10-25', 2),
-(18, 2, 'meal', 'lunch', '2023-10-26', 2);
+(18, 2, 'meal', 'lunch', '2023-10-26', 2),
+(28, 9, 'meal', 'lunch', '2023-10-26', 18),
+(32, 9, 'meal', 'breakfast', '2023-10-26', 21);
 
 -- --------------------------------------------------------
 
@@ -119,7 +121,13 @@ INSERT INTO `goals` (`id`, `user_id`, `type_id`, `type`, `target_metrics`, `targ
 (4, 4, 2, 'meal', NULL, '2023-10-25', NULL),
 (5, 2, 37, 'meal', NULL, '2023-10-30', NULL),
 (9, 2, 26, 'meal', NULL, '2023-10-26', NULL),
-(16, 2, 31, 'meal', NULL, '2023-10-28', NULL);
+(16, 2, 31, 'meal', NULL, '2023-10-28', NULL),
+(18, 9, 26, 'meal', NULL, '2023-10-28', NULL),
+(21, 9, 37, 'meal', NULL, '2023-10-29', NULL),
+(22, 9, 31, 'meal', NULL, '2023-10-28', NULL),
+(23, 9, 2, 'meal', NULL, '2023-10-31', NULL),
+(24, 9, 2, 'meal', NULL, '2023-10-30', NULL),
+(25, 9, 2, 'meal', NULL, '2023-10-29', NULL);
 
 -- --------------------------------------------------------
 
@@ -143,7 +151,8 @@ CREATE TABLE `health_metrics` (
 
 INSERT INTO `health_metrics` (`id`, `user_id`, `height`, `weight`, `age`, `bmi`, `category_id`) VALUES
 (2, 2, 165, 45, 24, 16.53, 1),
-(3, 4, 165, 45, 22, 16.53, 1);
+(3, 4, 165, 45, 22, 16.53, 1),
+(4, 9, 165, 45, NULL, 16.5289, 1);
 
 -- --------------------------------------------------------
 
@@ -232,6 +241,8 @@ CREATE TABLE `user` (
   `gender` varchar(20) NOT NULL,
   `date_of_birth` date DEFAULT NULL,
   `email` varchar(50) NOT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `number` int(11) DEFAULT NULL,
   `password` varchar(16) NOT NULL,
   `goal_id` int(11) DEFAULT NULL,
   `user_type` int(1) DEFAULT NULL
@@ -241,10 +252,11 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `first_name`, `last_name`, `age`, `gender`, `date_of_birth`, `email`, `password`, `goal_id`, `user_type`) VALUES
-(2, 'Ej', 'Sinfuego', NULL, 'male', NULL, 'ej@mail.com', 'password', NULL, 1),
-(4, 'Test ', 'User', NULL, 'male', NULL, 'test@mail.com', 'password', NULL, 1),
-(5, 'admin', 'test', NULL, 'male', '2023-10-31', 'admin@mail.com', 'password', NULL, 0);
+INSERT INTO `user` (`id`, `first_name`, `last_name`, `age`, `gender`, `date_of_birth`, `email`, `address`, `number`, `password`, `goal_id`, `user_type`) VALUES
+(2, 'Ej', 'Sinfuego', NULL, 'male', NULL, 'ej@mail.com', NULL, NULL, 'password', NULL, 1),
+(4, 'Test ', 'User', NULL, 'male', NULL, 'test@mail.com', NULL, NULL, 'password', NULL, 1),
+(5, 'admin', 'test', NULL, 'male', '2023-10-31', 'admin@mail.com', NULL, NULL, 'password', NULL, 0),
+(9, 'Maria', 'Mercedes', 22, 'female', NULL, 'maria@mail.com', '                                        sample address', 987654321, 'password', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -266,7 +278,10 @@ CREATE TABLE `user_activity_id` (
 
 INSERT INTO `user_activity_id` (`user_activity_id`, `activity_id`, `user_id`, `date_start`, `date_end`) VALUES
 (1, 1, 4, '2023-10-28 00:00:00', '0000-00-00 00:00:00'),
-(2, 1, 2, '2023-10-28 00:00:00', '0000-00-00 00:00:00');
+(2, 1, 2, '2023-10-28 00:00:00', '2023-10-26 00:00:00'),
+(4, 2, 9, '2023-10-26 00:00:00', '2023-10-26 00:00:00'),
+(14, 1, 9, '2023-10-26 00:00:00', '2023-10-26 00:00:00'),
+(15, 3, 9, '2023-10-26 00:00:00', '2023-10-26 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -276,12 +291,23 @@ INSERT INTO `user_activity_id` (`user_activity_id`, `activity_id`, `user_id`, `d
 
 CREATE TABLE `workout_plans` (
   `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `plan_name` varchar(50) NOT NULL,
   `description` varchar(500) NOT NULL,
   `duration` varchar(100) NOT NULL,
   `exercise_id` int(11) DEFAULT NULL,
   `category_id` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `workout_plans`
+--
+
+INSERT INTO `workout_plans` (`id`, `user_id`, `plan_name`, `description`, `duration`, `exercise_id`, `category_id`) VALUES
+(1, 9, '', '', '', 2, NULL),
+(2, 9, '', '', '', 1, NULL),
+(3, 9, '', '', '', 3, NULL),
+(4, 9, '', '', '', 5, NULL);
 
 --
 -- Indexes for dumped tables
@@ -362,7 +388,7 @@ ALTER TABLE `workout_plans`
 -- AUTO_INCREMENT for table `achievement`
 --
 ALTER TABLE `achievement`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -380,13 +406,13 @@ ALTER TABLE `exercise_activity`
 -- AUTO_INCREMENT for table `goals`
 --
 ALTER TABLE `goals`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `health_metrics`
 --
 ALTER TABLE `health_metrics`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `meal_plans`
@@ -404,19 +430,19 @@ ALTER TABLE `recipes`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `user_activity_id`
 --
 ALTER TABLE `user_activity_id`
-  MODIFY `user_activity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_activity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `workout_plans`
 --
 ALTER TABLE `workout_plans`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
