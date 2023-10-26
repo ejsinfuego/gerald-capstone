@@ -22,18 +22,30 @@ if ($_POST) {
     }
 
     // Database connection
+    $user = 1;
 
     // Insert data into the database
-    $user = $database->query("INSERT INTO user (email, password, gender, first_name, last_name)
-            VALUES ('$email', '$password', '$gender', '$first_name', '$last_name')");
+    $user = $database->query("INSERT INTO user (email, password, gender, first_name, last_name, user_type)
+            VALUES ('$email', '$password', '$gender', '$first_name', '$last_name','$user')");
     $user_id = $database->insert_id;
     $bmi = $weight / (($height / 100) * ($height / 100));
+    $category = 0;
+    if($bmi < 18.5){
+        $category = 1;
+    }elseif($bmi < 24.9){
+        $category = 2;
+    }elseif($bmi < 29.9){
+        $category = 4;
+    }else{
+        $category = 5;
+    }
     
 
-    $bmi = $database->query("INSERT INTO health_metrics (user_id, height, weight, bmi)
-            VALUES ('$user_id', '$height', '$weight', '$bmi')");
+    $bmi = $database->query("INSERT INTO health_metrics (user_id, height, weight, bmi, category_id) VALUES ('$user_id', '$height', '$weight', '$bmi', '$category')");
     $_SESSION['message'] = 'Registration Successful';
-    header('location: index.php');
+
+
+    header('location: mealplanning.php');
 
 
 }

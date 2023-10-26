@@ -2,7 +2,50 @@
 
 include('header.php');
 
+$category_word = $database->query("select category from category where id={$category}");
+$category_word = $category_word->fetch_column();
+$progress= 0;
+$health_progress = $database->query('select * from achievement where user_id='.$_SESSION['user_id']);
 
+foreach($health_progress as $health_progress){
+  $progress = ++$progress;
+}
+//gets the total count of the goals
+$meals = $database->query('select * from goals where user_id='.$_SESSION['user_id']);
+$meals = count($meals->fetch_all());
+$finished_meals = $database->query('select * from achievement where user_id='.$_SESSION['user_id'].'');
+
+$finished_meals = count($finished_meals->fetch_all());
+
+
+$finished_activities = 0;
+
+
+$done_activities = $database->query('select * from user_activity_id where user_id ='.$_SESSION['user_id']);
+
+$activities = count($done_activities->fetch_all()); //count all the unfinished activities
+
+ //get the percentage of the finished activities
+foreach($done_activities as $done_activities){
+  if($done_activities['date_end'] != '0000-00-00 00:00:00'){
+    $finished_activities = ++$finished_activities;
+  }
+}
+
+$total_goals = $meals + $activities;
+$total_achievements = $finished_meals + $finished_activities;
+//get the percentage of the progress
+$progress = ($total_achievements / $total_goals) * 100;
+$progress = round($progress, 2);
+
+$percentage_for_activities = ($finished_activities / $activities) * 100;
+$percentage_for_activities = round($percentage_for_activities, 2);
+$percentage_for_meals = ($finished_meals / $meals) * 100;
+$percentage_for_meals = round($percentage_for_meals, 2);
+
+
+
+$goals = count($database->query('select * from goals where user_id='.$_SESSION['user_id'])->fetch_all());
 
 ?>
 
@@ -10,9 +53,6 @@ include('header.php');
    <!-- ==== You Section ==== -->
    <section id="You" class="you section-bg" style="padding-top: 150px;">
     <div class="container">
-      
-  
-
         <div class="container">
             <div class="main-body">
                 <div class="row">
@@ -50,21 +90,32 @@ include('header.php');
                     </div>
                     <div class="col-lg-8">
                         <div class="card">
+
                             <div class="card-body">
+                                <form method="post" action="updateProfile.php">
                                 <div class="row mb-3">
                                     <div class="col-sm-3">
-                                        <h6 class="mb-0">Full Name</h6>
+                                        <h6 class="mb-0">First Name</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" class="form-control" value="<?php echo $user['first_name'].' '.$user['last_name']; ?>">
+                                        <input type="text" name="first_name" class="form-control" value="<?php echo $user['first_name']; ?>">
                                     </div>
                                 </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Last Name</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        <input type="text" name="last_name" class="form-control" value="<?php echo $user['last_name']; ?>">
+                                    </div>
+                                </div>
+                              
                                 <div class="row mb-3">
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">Email</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" class="form-control" value="<?php echo $user['email']; ?>">
+                                        <input type="text" name="email" class="form-control" value="<?php echo $user['email']; ?>">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -72,7 +123,7 @@ include('header.php');
                                         <h6 class="mb-0">Phone</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" class="for m-control" value="<?php echo (isset($user['phone_number']) ? $user['phone_number'] : 'Not Available'); ?>">
+                                        <input name="number" type="text" class="for m-control" value="<?php echo (isset($user['number']) ? $user['number'] : 'Not Available'); ?>">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -80,7 +131,15 @@ include('header.php');
                                         <h6 class="mb-0">Age</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" class="form-control" value="<?php echo (isset($user['age']) ? $user['age'] : 'Not Available'); ?>">
+                                        <input type="text" name="age" type="number" class="form-control" value="<?php echo (isset($user['age']) ? $user['age'] : 'Not Available'); ?>">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Gender</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        <input type="text" name="gender" type="number" class="form-control" value="<?php echo (isset($user['gender']) ? $user['gender'] : 'Not Available'); ?>">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -88,51 +147,55 @@ include('header.php');
                                         <h6 class="mb-0">Address</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <textarea type="text" class="form-control" value="<?php echo (isset($user['age']) ? $user['age'] : 'Not Available'); ?>">
-                                        <?php echo (isset($user['age']) ? $user['age'] : 'Not Available'); ?></textarea>
+                                        <textarea type="text" name="address" class="form-control" value="<?php echo (isset($user['address']) ? $user['age'] : 'Not Available'); ?>">
+                                        <?php echo (isset($user['address']) ? $user['address'] : 'Not Available'); ?></textarea>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="button" class="btn btn-primary px-4" value="Save Changes">
+                                        <button type="submit" class="btn btn-primary px-4" value="Save Changes">Update</button>
                               
                                     </div>
-                                    <div class="row">
+                                    <div class="row my-2">
                                       <div class="col-sm-3"></div>
                                       <div class="col-sm-9 text-secondary">
-                                          <input type="button" class="btn btn-primary px-4 delete-button" value="Delete Account">
+                                          <button type="button" class="btn btn-primary px-4 delete-button">Delete Account</button>
                                       </div>
-                                
                                       </div>
-                                  
-                                
                             </div>
+                        </form>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-body">
                                         <h5 class="d-flex align-items-center mb-3">Health Status</h5>
-                                        <p>BMI</p>
-                                        <div class="progress mb-3" style="height: 5px">
-                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class=""> 
+                                            <p>BMI</p>
+                                           <p>
+                                            <?php echo $category_word; ?>
+                                           </p>
                                         </div>
-                                        <p>Physical Fitness</p>
+                                        <!-- <div>
+                                           <p>Physical Fitness</p>
                                         <div class="progress mb-3" style="height: 5px">
                                             <div class="progress-bar bg-danger" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
+                                        </div> 
+                                        </div> -->
+                                        
                                         <p>Health Progress</p>
                                         <div class="progress mb-3" style="height: 5px">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: <?php echo $progress.'%' ; ?>" aria-valuenow="<?php echo $progress; ?>" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
+                                       
                                         <p>Meal Planning </p>
                                         <div class="progress mb-3" style="height: 5px">
-                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: <?= $percentage_for_meals; ?>%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                         <p>Workout Ethics </p>
                                         <div class="progress" style="height: 5px">
-                                            <div class="progress-bar bg-info" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: <?= $percentage_for_meals ?>%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
                                 </div>

@@ -2,212 +2,138 @@
 
 include('header.php');
 
+//inner join from goals to meal_plans and to user table
+$plans = $database->query('SELECT goals.id, goals.user_id, goals.type_id, goals.type, goals.target_date, meal_plans.plan_name, meal_plans.daily_meal_schedule, meal_plans.portion_sizes FROM goals INNER JOIN meal_plans ON goals.type_id = meal_plans.id INNER JOIN user ON goals.user_id = user.id WHERE goals.user_id = "'.$_SESSION['user_id'].'"');
+$plans = $plans->fetch_all(MYSQLI_ASSOC);
 
-$breakfast_day1 = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day1" and plan_name = "breakfast"');
-$breakfast_day1 = $breakfast_day1->fetch_assoc();
+//inner join from user_activity_id to exercise_activity table
+$workout = $database->query('SELECT * FROM workout_plans INNER JOIN exercise_activity ON workout_plans.exercise_id = exercise_activity.id WHERE workout_plans.user_id = "'.$_SESSION['user_id'].'"');
+$workout = $workout->fetch_all(MYSQLI_ASSOC);
 
-$lunch_day1 = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day1" and plan_name = "lunch"');
-$lunch_day1 = $lunch_day1->fetch_assoc();
+//inner join achievement to user_activity_id to exercise_activity
+$done_workout = $database->query('SELECT * FROM user_activity_id INNER JOIN workout_plans ON user_activity_id.activity_id = workout_plans.exercise_id INNER JOIN exercise_activity ON workout_plans.exercise_id = exercise_activity.id WHERE user_activity_id.user_id ='.$_SESSION['user_id']);
+$done_workout = $done_workout->fetch_all(MYSQLI_ASSOC);
 
-$workout = $database->query('select * from exercise_activity where category_id='.$category.'');
-$workout = $workout->fetch_assoc();
-
-$snack_day1 = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day1" and plan_name = "snack"');
-$snack_day1 = $snack_day1->fetch_assoc();
-
-$dinner_day1 = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day1" and plan_name = "dinner"');
-$dinner_day1 = $dinner_day1->fetch_assoc();
-
-$breakfast_day2 = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day2" and plan_name = "breakfast"');
-$breakfast_day2 = $breakfast_day2->fetch_assoc();
-
-
-$lunch_day2 = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day2" and plan_name = "lunch"');
-$lunch_day2 = $lunch_day2->fetch_assoc();
-
-
-$snack_day2 = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day2" and plan_name = "snack"');
-$snack_day2 = $snack_day2->fetch_assoc();
-
-
-$dinner_day2 = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day2" and plan_name = "dinner"');
-$dinner_day2 = $dinner_day2->fetch_assoc();
-
-
-$breakfast_day3 = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day3" and plan_name = "breakfast"');
-$breakfast_day3 = $breakfast_day3->fetch_assoc();
-
-
-$lunch_day3 = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day3" and plan_name = "lunch"');
-$lunch_day3 = $lunch_day3->fetch_assoc();
-
-$snack_day3 = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day3" and plan_name = "snack"');
-$snack_day3 = $snack_day3->fetch_assoc();
-
-$dinner_day3 = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day3" and plan_name = "dinner"');
-$dinner_day3 = $dinner_day3->fetch_assoc();
-
-
-
+$done_meals = $database->query('SELECT * FROM achievement INNER JOIN goals ON achievement.goal_id = goals.id INNER JOIN meal_plans ON goals.type_id = meal_plans.id where achievement.user_id ='.$_SESSION['user_id'])
 ?>
 <style>
+  .card-link{
+    color: teal;
+  }
   .card-link:hover{
     background-color: teal;
     color: white;
     padding: 10px;
     border-radius: 3px;
   }
+
+
+  .start{
+    margin-top: 50px;
+    background-color: teal;
+    color: white;
+    border-radius: 50px;
+  }
+
+  .start:hover{
+    background-color: white;
+    color: teal;
+    border: 1px solid teal;
+  }
 </style>
+
     <!-- ======= Portfolio Section ======= -->
   <section id="portfolio" data-aos="fade-up" class="portfolio" style="margin-top: 100px;">
-      <div class="container d-flex flex-wrap">
+
+<div class="container d-flex flex-wrap">
   <div class="section-title w-100" data-aos="fade-left">
-          <h2>Meal Recommendations</h2>
+          <h2>These are your health goals so far.</h2>
           <p style = "font-size: larger;">These are the Health Goals: </p>
   </div>
+
   <h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4">Day 1</h5>
+  <?php foreach($plans as $plan) :?>
+   
   <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
   <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
   <div class="card-body">
-    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($breakfast_day1['plan_name']); ?></h5>
+    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($plan['plan_name']); ?></h5>
     <p class="card-text">These are the meals recommended for this period</p>
   </div>
   <ul class="list-group list-group-flush">
-  <?php $meals = explode("\n", $breakfast_day1["portion_sizes"]); 
+  <?php $meals = explode("\n", $plan["portion_sizes"]); 
         foreach($meals as $meal):
   ?>
-    <li class="list-group-item"><?php echo $meal; ?></li>
+    <li class="list-group-item"><?php echo ucwords($meal); ?></li>
     <?php endforeach; ?>
+  </ul
+  >  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Target Date: <?php echo date('M d, Y', strtotime($plan['target_date'])) ; ?> </li>
+  
   </ul>
-  <div class="card-body">
-    <a href="#" class="card-link">Done</a>
+    <form method="post" action="setAsDone.php">
+    <input type="hidden" name="goal_id" value="<?= $plan['id'] ?>">
+    <input type="hidden" name="goal_type" value="meal">
+    <input type="hidden" name="description" value="<?= $plan['plan_name'] ?>">
+    <input type="hidden" name="completion_date" value="<?= date('Y-m-d') ?>">
+    <?php $button ='<button type="submit" class="btn card-link">
+    Mark as Done</button>
+   </form>'; 
+    foreach($done_meals as $done_meal) : ?> 
+    <?php 
+    if( $plan['type_id'] == $done_meal['type_id'] ) :
+    $button = '<p class"portfolio" style="margin-left: 20px; margin-top: 10px;">Completed on '.date('M d, Y', strtotime($done_meal['completion_date'])).'</p>';
+    break; ?>
+    <?php endif; ?>
+   <?php endforeach;?>   
+   <?= $button ?>
   </div>
-</div>
 
-<div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
-  <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst( $lunch_day1['plan_name']); ?></h5>
-    <p class="card-text">These are the meals recommended for this period</p>
-  </div>
-  <ul class="list-group list-group-flush">
-  <?php $meals = explode("\n", $lunch_day1["portion_sizes"]); 
-        foreach($meals as $meal):
-  ?>
-    <li class="list-group-item"><?php echo $meal; ?></li>
-    <?php endforeach; ?>
-  </ul>
-  <div class="card-body">
-    <a href="#" class="card-link">Done</a>
-  </div>
-</div>
+  <?php endforeach; ?>
 
-<div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
-  <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst( $snack_day1['plan_name']); ?></h5>
-    <p class="card-text">These are the meals recommended for this period</p>
-  </div>
-  <ul class="list-group list-group-flush">
-  <?php $meals = explode("\n", $snack_day1["portion_sizes"]); 
-        foreach($meals as $meal):
-  ?>
-    <li class="list-group-item"><?php echo $meal; ?></li>
-    <?php endforeach; ?>
-  </ul>
-  <div class="card-body">
-    <a href="#" class="card-link">Done</a>
-  </div>
-</div>
 
-<div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
-  <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($dinner_day1['plan_name']); ?></h5>
-    <p class="card-text">These are the meals recommended for this period</p>
-  </div>
-  <ul class="list-group list-group-flush">
-  <?php $meals = explode("\n", $dinner_day1["portion_sizes"]); 
-        foreach($meals as $meal):
-  ?>
-    <li class="list-group-item"><?php echo $meal; ?></li>
-    <?php endforeach; ?>
-  </ul>
-  <div class="card-body">
-    <a href="#" class="btn-sm card-link">Done</a>
-  </div>
-</div>
+
+
+
 
 <h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4 font-size-bold">Workout</h5>
+<?php  foreach($workout as $workout_day): ?>
+
   <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
-  <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+  <img src="assets/img/workout.jpg" class="card-img-top" alt="...">
   <div class="card-body">
-    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($workout['activity_name']); ?></h5>
+    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($workout_day['activity_name']); ?></h5>
     <p class="card-text">Recommended work out for your body category</p>
   </div>
   <ul class="list-group list-group-flush">
-    <li class="list-group-item">Duration: <?php echo date('h:i', $workout['duration']; ?></li>
+    <li class="list-group-item">Intensity Level: <?php echo ucfirst($workout_day['intensity_level']); ?> </li>
   </ul>
-  <div class="card-body">
-    <a href="#" class="card-link">Done</a>
-  </div>
-</div>
-
-
-<!-- <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
-  <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst( $breakfast_day2['plan_name']); ?></h5>
-    <p class="card-text">These are the meals recommended for this period</p>
-  </div>
   <ul class="list-group list-group-flush">
-  <?php $meals = explode("\n", $breakfast_day2["portion_sizes"]); 
-        foreach($meals as $meal):
-  ?>
-    <li class="list-group-item"><?php echo $meal; ?></li>
-    <?php endforeach; ?>
+    <li class="list-group-item">Duration: <?php echo date('G', strtotime($workout_day['duration'])). ' Hour/s'; ?> </li>
   </ul>
+ 
   <div class="card-body">
-    <a href="#" class="card-link">Done</a>
-  </div>
+   <form method="post" action="setAsDoing.php">
+    <input type="hidden" name="activity_id" value="<?php echo $workout_day['exercise_id']; ?>">
+   <?php $submit= '<button type="submit" class="btn card-link">
+    Set as Doing</button>';
+    
+     foreach($done_workout as $workout): ?>
+    <?php if($workout_day['exercise_id'] == $workout['activity_id']): ?>
+      <?php if($workout['date_end'] != '0000-00-00 00:00:00'): ?>
+        <?php $submit = '<p class"portfolio" style="margin-left: 20px; margin-top: 10px;">Done</p>'; break; ?>
+      <?php endif; ?>
+      <input type="hidden" name="user_act_id" value="<?php echo $workout['user_activity_id']; ?>">
+        <input type='hidden' name='completion_date' value='<?php echo date('Y-m-d'); ?>'>
+    <?php
+      $submit = "<button type='submit' class='btn card-link'>Set As Done</button></form>"; break; ?>
+    <?php endif; ?>
+  <?php endforeach; ?>
+<?= $submit ?>
+</form>
 </div>
-
-<div class="card mx-3" data-aos="fade-up" style="width: 18rem; font-family:Arial,sans-serif;">
-  <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst( $lunch_day2['plan_name']); ?></h5>
-    <p class="card-text">These are the meals recommended for this period</p>
-  </div>
-  <ul class="list-group list-group-flush">
-  <?php $meals = explode("\n", $lunch_day2["portion_sizes"]); 
-        foreach($meals as $meal):
-  ?>
-    <li class="list-group-item"><?php echo $meal; ?></li>
-    <?php endforeach; ?>
-  </ul>
-  <div class="card-body">
-    <a href="#" class="card-link">Done</a>
-  </div>
 </div>
-
-
-<div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
-  <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($dinner_day2['plan_name']); ?></h5>
-    <p class="card-text">These are the meals recommended for this period</p>
-  </div>
-  <ul class="list-group list-group-flush">
-  <?php $meals = explode("\n", $dinner_day2["portion_sizes"]); 
-        foreach($meals as $meal):
-  ?>
-    <li class="list-group-item"><?php echo $meal; ?></li>
-    <?php endforeach; ?>
-  </ul>
-  <div class="card-body">
-    <a href="#" class="btn-sm card-link">Done</a>
-  </div>
-</div> -->
+<?php endforeach; ?>
 
 
     <!-- ======= Testimonials Section ======= -->
@@ -402,7 +328,7 @@ $dinner_day3 = $dinner_day3->fetch_assoc();
           </div>
 
           <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
-            <iframe style="border:0; width: 100%; height: 270px;" src="http://www.maplandia.com/philippines/region-5/camarines-sur/goa/" title="google satellite map of Goa"><img src="http://www.maplandia.com/images/icon.gif" width="88" height="31" border="0" alt="Goa google map"/></a>" frameborder="0" allowfullscreen></iframe>
+            <!-- <iframe style="border:0; width: 100%; height: 270px;" src="http://www.maplandia.com/philippines/region-5/camarines-sur/goa/" title="google satellite map of Goa"><img src="http://www.maplandia.com/images/icon.gif" width="88" height="31" border="0" alt="Goa google map"/></a>" frameborder="0" allowfullscreen></iframe> -->
             <div class="info mt-4">
               <i class="bi bi-geo-alt"></i>
               <h4>Location:</h4>
@@ -507,7 +433,7 @@ $dinner_day3 = $dinner_day3->fetch_assoc();
           <!-- You can delete the links only if you purchased the pro version. -->
           <!-- Licensing information: https://bootstrapmade.com/license/ -->
           <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/bethany-free-onepage-bootstrap-theme/ -->
-          Designed by <a href="https://web.facebook.com/GeraldJean.villar.34">Gerald Villar</a>
+          <!-- Designed by <a href="https://web.facebook.com/GeraldJean.villar.34">Gerald Villar</a> -->
         </div>
       </div>
       <div class="social-links text-center text-md-right pt-3 pt-md-0">

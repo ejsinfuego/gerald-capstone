@@ -1,19 +1,15 @@
-<?php
-session_start();
-include('connection.php');
-
-?>
 <!doctype html>
 <html>
 <head>
     <!-- Favicons -->
     <link href="assets/img/icon.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-    <link rel="stylesheet" href="logindesign.css">
+
     <script src="script.js"></script>
+    <link rel="stylesheet" href="logindesign.css">
 </head>
 <!-- multistep form -->
-<form action="login.php" method="post">
+<form id="msform" action="signupScript.php" method="post">
     <!-- progressbar -->
     <ul id="progressbar">
         <li class="active">Account Verification</li>
@@ -29,7 +25,7 @@ include('connection.php');
         <input type="text" name="email" placeholder="Email" />
         <input type="password" name="pass" placeholder="Password" />
         <input type="password" name="cpass" placeholder="Confirm Password" />
-        <a href="beforeyoulogin.html">Already Have an Account?</a><br>
+        <a href="login.php">Already Have an Account?</a><br>
         <br>
         <br>
 
@@ -44,9 +40,9 @@ include('connection.php');
         <label for="Gender"></label>
         <select name="gender" id="Gender">
             <option value="-1">Please Select your gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="None">Prefer not to say</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="none">Prefer not to say</option>
         </select>
         <input type="button" name="previous" class="previous action-button" value="Previous" />
         <input type="button" name="next" class="next action-button" value="Next" />
@@ -64,26 +60,7 @@ include('connection.php');
 </form>
 <div>
     <script>
-        // JavaScript code for displaying a pop-up message
-        document.addEventListener("DOMContentLoaded", function () {
-            // Get the form element
-            const form = document.getElementById('msform');
-
-            // Add an event listener for form submission
-            form.addEventListener('submit', function (e) {
-                e.preventDefault(); // Prevent the form from submitting
-
-                // Simulate a successful submission for demonstration purposes
-                const isSuccessful = true; // Change this to your actual success condition
-
-                if (isSuccessful) {
-                    alert('Successful Registration!'); // Display a success message
-                    form.reset(); // Reset the form
-                } else {
-                    alert('Incorrect Username or Password!'); // Display an error message
-                }
-            });
-        });
+       
     </script>
 </div>
 </html>

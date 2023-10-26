@@ -18,11 +18,11 @@ if($_POST){
     if($check->num_rows > 0){
         $database->query('UPDATE health_metrics SET weight = "'.$weight.'", height = "'.$height.'", age = "'.$age.'", bmi = "'.$bmi.'", category_id = "'.$category.'" WHERE user_id = "'.$user.'"');
 
-        header('location: loggedin.php');
+        header('location: mealplanning.php');
 
     }else{
         $database->query('INSERT INTO health_metrics (user_id, weight, height, age, bmi, category_id) VALUES ("'.$user.'", "'.$weight.'", "'.$height.'", "'.$age.'", "'.$bmi.'", "'.$category.'")');
 
-        header('location: loggedin.php');
+        header('location: mealplanning.php');
     }
 }

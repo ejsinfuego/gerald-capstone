@@ -1,29 +1,50 @@
-<?php 
+<?php
 
 session_start();
+?>
 
-include('connection.php');
-
-if($_POST){
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    $user = $database->query('SELECT * FROM user WHERE email = "'.$email.'"');
-    if($user->num_rows > 0){
-        $user = $user->fetch_assoc();
-        if($user['password'] == $password){
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['username'] = $user['first_name'];
-            header("Location: loggedin.php");
-        }else{
-            $_SESSION['message'] = "Wrong Password";
-            header('location: beforeyoulogin.php');
-            
-        }
-    }else{
-        $_SESSION['message'] = "User not found";
-        header('location: beforeyoulogin.php');
-        echo "User not found";
-    }
+<!doctype html>
+<html>
+  <head>
     
-}
+    
+    <script src="script.js"></script> 
+    <link rel="stylesheet" href="logindesign.css">
+    <a href="index.php">Go back to Homepage</a>
+  </head>
+<!-- multistep form -->
+<form id="msform" action="loginScript.php" method="post">
+  <!-- progressbar -->
+  <ul id="progressbar">
+   
+  </ul>
+  <!-- fieldsets -->
+  <fieldset>
+    <h2 class="fs-title">Login Your Account</h2>
+    <h3 class="fs-subtitle"></h3>
+    <p style="color: red;">
+      <?php
+      if(isset($_SESSION['message'])){
+          echo $_SESSION['message'];
+          unset($_SESSION['message']);
+      }
+      ?>
+    <input type="text" name="email" placeholder="Email" />
+    
+    <input type="password" name="password" placeholder="Password" />
+    
+    <div class="remember-me">
+      <input type="checkbox" id="remember" name="remember">
+      <label for="remember">Remember Me?</label>
+  </div>
+  
+    <a href="forgot password.html">Forgot Password?</a><br>
+    <a href="signup.php">Sign Up</a><br>
+ 
+  
+   <br> <button type="submit" name="submit" class="submit action-button" target="_top">Login</button>
+   
+  </fieldset>
+</form>
+</div>
+</html>
