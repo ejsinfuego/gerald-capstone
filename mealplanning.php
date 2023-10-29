@@ -105,22 +105,24 @@ $workout_plan = $database->query('select * from user_activity_id where user_id =
     <li class="list-group-item"><?php echo ucwords($meal); ?></li>
     <?php endforeach; ?>
   </ul>
-  <?php foreach($plans as $goal) :?>
-    <?php if($goal['type_id'] != $breakfast_day1['id']):?>
-      <?php $form = '<div class="card-body">
+  <?php $form = '<div class="card-body">
     <form action="setGoal.php" method="post">
     <input type="hidden" value='.$breakfast_day1['id'].' name="goal_type">
     <label id="plan" class="plan" style="font-family:Arial,sans-serif; font-size: 11px;">Set Target Date</label>
     <input type="date" name="target_date" id="plan" class="plan form-control">
     <button type="submit" class="btn card-link">Include in my Plan</button>
     </form>
-  </div>'; ?>
+  </div>';
+   foreach($plans as $goal) :?>
+    <?php if($goal['type_id'] != $breakfast_day1['id']):?>
+    <?php ?>
   <?php else: ?>
-    <?php $form = '<a href="#" class="btn-sm" style="padding-left: 15px; padding-bottom: 10px;">Aready Included in Your Plan</a> ';
+    <?php 
+    $form = '<a href="#" class="btn-sm" style="padding-left: 15px; padding-bottom: 10px;">Aready Included in Your Plan</a> ';
     break; ?>
-    <?php endif; ?>
-    <?php endforeach;?>
-    <?php echo $form; ?>
+  <?php endif; ?>
+  <?php endforeach;?>
+  <?php echo $form; ?> 
 </div>
 
 <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
@@ -136,16 +138,16 @@ $workout_plan = $database->query('select * from user_activity_id where user_id =
     <li class="list-group-item"><?php echo ucwords($meal); ?></li>
     <?php endforeach; ?>
   </ul>
-  <?php foreach($plans as $goal) :?>
-    <?php if($goal['type_id'] != $lunch_day1['id']):?>
-      <?php $form = '<div class="card-body">
+  <?php $form = '<div class="card-body">
     <form action="setGoal.php" method="post">
     <input type="hidden" value='.$lunch_day1['id'].' name="goal_type">
     <label id="plan" class="plan" style="font-family:Arial,sans-serif; font-size: 11px;">Set Target Date</label>
     <input type="date" name="target_date" id="plan" class="plan form-control">
     <button type="submit" class="btn card-link">Include in my Plan</button>
     </form>
-  </div>'; ?>
+  </div>'; foreach($plans as $goal) :?>
+    <?php if($goal['type_id'] != $lunch_day1['id']):?>
+      <?php ; ?>
   <?php else: ?>
     <?php $form = '<a href="#" class="btn-sm" style="padding-left: 15px; padding-bottom: 10px;">Aready Included in Your Plan</a> ';
     break; ?>
@@ -167,16 +169,17 @@ $workout_plan = $database->query('select * from user_activity_id where user_id =
     <li class="list-group-item"><?php echo ucwords($meal); ?></li>
     <?php endforeach; ?>
   </ul>
-  <?php foreach($plans as $goal) :?>
-    <?php if($goal['type_id'] != $snack_day1['id']):?>
-      <?php $form = '<div class="card-body">
+  <?php $form = '<div class="card-body">
     <form action="setGoal.php" method="post">
     <input type="hidden" value='.$snack_day1['id'].' name="goal_type">
     <label id="plan" class="plan" style="font-family:Arial,sans-serif; font-size: 11px;">Set Target Date</label>
     <input type="date" name="target_date" id="plan" class="plan form-control">
     <button type="submit" class="btn card-link">Include in my Plan</button>
     </form>
-  </div>'; ?>
+  </div>';
+  foreach($plans as $goal) :?>
+    <?php if($goal['type_id'] != $snack_day1['id']):?>
+      <?php ; ?>
   <?php else: ?>
       <?php $form = '<a href="#" class="btn-sm" style="padding-left: 15px; padding-bottom: 10px;">Aready Included in Your Plan</a> '; ?>
     <?php endif; ?>
@@ -199,16 +202,16 @@ $workout_plan = $database->query('select * from user_activity_id where user_id =
     <li class="list-group-item"><?php echo ucwords($meal); ?></li>
     <?php endforeach; ?>
   </ul>
-  <?php foreach($plans as $goal) :?>
-    <?php if($goal['type_id'] != $dinner_day1['id']):?>
-    <?php $form = '<div class="card-body">
+  <?php $form = '<div class="card-body">
     <form action="setGoal.php" method="post">
     <input type="hidden" value='.$dinner_day1['id'].' name="goal_type">
     <label id="plan" class="plan" style="font-family:Arial,sans-serif; font-size: 11px;">Set Target Date</label>
     <input type="date" name="target_date" id="plan" class="plan form-control">
     <button type="submit" class="btn card-link">Include in my Plan</button>
     </form>
-  </div>'; ?>
+  </div>'; foreach($plans as $goal) :?>
+    <?php if($goal['type_id'] != $dinner_day1['id']):?>
+      
   <?php else: ?>
       <?php $form = '<a href="#" class="btn-sm" style="padding-left: 15px; padding-bottom: 10px;">Aready Included in Your Plan</a> '; 
       break; ?>

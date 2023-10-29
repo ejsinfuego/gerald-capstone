@@ -95,7 +95,7 @@ if(!isset($category)){
             <li><a class="nav-link scrollto" href="mealplanning.php">Meal Planning</a></li>
             <?php if($user['user_type'] == 0) : ?>
             <li><a style="cursor: pointer" onclick="openAdmin()" class="nav-link scrollto">Add Meal Plan</a></li>
-            <li><a onclick="openWorkout()" class="nav-link scrollto">Add Workout</a></li>
+        
             <?php endif ?>
               <ul>
                 
@@ -142,7 +142,7 @@ if(!isset($category)){
               <br>
             </div>
 
-
+            <!-- admin block -->
             <div id="admin">
               <a style="cursor:pointer;" onclick="openWorkout()">Add Workout</a>
               <div id="meal">
