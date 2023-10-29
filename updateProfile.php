@@ -18,7 +18,7 @@ if($_POST){
     $user = $_SESSION['user_id'];
     
     //write a code to update user table
-    $database->query("UPDATE user SET first_name='$first_name', last_name='$last_name', email='$email', number='$number' , age='$age', gender='$gender',address='$address' WHERE id=".$user);
+    $database->query("UPDATE user SET first_name='$first_name', last_name='$last_name', email='$email', phone_number='$number' , age='$age', gender='$gender',address='$address' WHERE id=".$user);
 
     header("Location: you.php");
 }

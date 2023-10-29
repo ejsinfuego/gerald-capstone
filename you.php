@@ -35,13 +35,27 @@ foreach($done_activities as $done_activities){
 $total_goals = $meals + $activities;
 $total_achievements = $finished_meals + $finished_activities;
 //get the percentage of the progress
-$progress = ($total_achievements / $total_goals) * 100;
-$progress = round($progress, 2);
+if($total_goals == 0 and $total_achievements == 0){
+    $progress = 0;
+}else{
+    $progress = ($total_achievements / $total_goals) * 100;
+    $progress = round($progress, 2);
+}
 
-$percentage_for_activities = ($finished_activities / $activities) * 100;
-$percentage_for_activities = round($percentage_for_activities, 2);
-$percentage_for_meals = ($finished_meals / $meals) * 100;
-$percentage_for_meals = round($percentage_for_meals, 2);
+if($finished_activities == 0 and $activities == 0){
+    $percentage_for_activities = 0;
+}else{
+    $percentage_for_activities = ($finished_activities / $activities) * 100;
+    $percentage_for_activities = round($percentage_for_activities, 2);
+}
+
+if($finished_meals == 0 and $meals == 0 ){
+    $percentage_for_meals = 0;
+}else{
+    $percentage_for_meals = ($finished_meals / $meals) * 100;
+    $percentage_for_meals = round($percentage_for_meals, 2);
+}
+
 
 
 
@@ -123,7 +137,7 @@ $goals = count($database->query('select * from goals where user_id='.$_SESSION['
                                         <h6 class="mb-0">Phone</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input name="number" type="text" class="for m-control" value="<?php echo (isset($user['number']) ? $user['number'] : 'Not Available'); ?>">
+                                        <input name="number" type="text" pattern="^\d{11}$" class="for m-control" value="<?php echo (isset($user['phone_number']) ? $user['phone_number'] : 'Not Available'); ?>">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
