@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const progressBarItems = document.querySelectorAll("#progressbar li");
 
     let currentStep = 0;
-
     // Function to show the current step and update indicators
     function showStep(step) {
         fieldsets.forEach((fieldset, index) => {

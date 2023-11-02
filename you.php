@@ -4,6 +4,11 @@ include('header.php');
 
 $category_word = $database->query("select category from category where id={$category}");
 $category_word = $category_word->fetch_column();
+if($category_word == null){
+    $category_word = "Not set, please set it in bmi calculator";
+}else{
+    $category_word = $category_word['category'];
+}
 $progress= 0;
 $health_progress = $database->query('select * from achievement where user_id='.$_SESSION['user_id']);
 
