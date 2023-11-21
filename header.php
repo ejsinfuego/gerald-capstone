@@ -10,14 +10,20 @@ if($_SESSION['user_id'] == null){
 
 $user = $database->query('SELECT * FROM user WHERE id = "'.$_SESSION['user_id'].'"');
 $user = $user->fetch_assoc();
+$_SESSION['first_name'] = $user['first_name'];
 
 $category = $database->query("select * from health_metrics where user_id={$user['id']}");
 
+
+
 $category = $category->fetch_assoc();
-if(!isset($category)){
+
+if($category == 0){
   $category = 0;
 }else{
+  $_SESSION['bmi'] = $category['bmi'];
   $category = $category['category_id'];
+  
 }
 ?>
 
@@ -106,7 +112,7 @@ if(!isset($category)){
                 
               </ul>
             </li>
-            <li><a class="nav-link scrollto" id="openModalLink">BMI Calculator</a></li>
+            <!-- <li><a class="nav-link scrollto" id="openModalLink">BMI Calculator</a></li> -->
             <form method="get" action="logout.php">
             <input style="border: none;" type="hidden" name="logout">
             <li><button type="submit" class="getstarted scrollto">

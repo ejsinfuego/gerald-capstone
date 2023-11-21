@@ -7,7 +7,8 @@ if($category == null){
 }
 
 $breakfast_day1 = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day1" and plan_name = "breakfast"');
-$breakfast_day1 = $breakfast_day1->fetch_assoc();
+$breakfast_day1 = $breakfast_day1->fetch_all(MYSQLI_ASSOC);
+
 
 $lunch_day1 = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day1" and plan_name = "lunch"');
 $lunch_day1 = $lunch_day1->fetch_assoc();
@@ -92,14 +93,16 @@ $workout_plan = $database->query('select * from user_activity_id where user_id =
           <p style = "font-size: larger;">These are the Health Goals: </p>
   </div>
   <h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4">Day 1</h5>
+  <?php foreach($breakfast_day1 as $breakfast1): ?>
+  
   <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
   <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
   <div class="card-body">
-    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($breakfast_day1['plan_name']); ?></h5>
+    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($breakfast1['plan_name']); ?></h5>
     <p class="card-text">These are the meals recommended for this period</p>
   </div>
   <ul class="list-group list-group-flush">
-  <?php $meals = explode("\n", $breakfast_day1["portion_sizes"]); 
+  <?php $meals = explode("\n", $breakfast1["portion_sizes"]); 
         foreach($meals as $meal):
   ?>
     <li class="list-group-item"><?php echo ucwords($meal); ?></li>
@@ -107,23 +110,24 @@ $workout_plan = $database->query('select * from user_activity_id where user_id =
   </ul>
   <?php $form = '<div class="card-body">
     <form action="setGoal.php" method="post">
-    <input type="hidden" value='.$breakfast_day1['id'].' name="goal_type">
+    <input type="hidden" value='.$breakfast1['id'].' name="goal_type">
     <label id="plan" class="plan" style="font-family:Arial,sans-serif; font-size: 11px;">Set Target Date</label>
     <input type="date" name="target_date" id="plan" class="plan form-control">
     <button type="submit" class="btn card-link">Include in my Plan</button>
     </form>
   </div>';
    foreach($plans as $goal) :?>
-    <?php if($goal['type_id'] != $breakfast_day1['id']):?>
+  <?php if($goal['type_id'] != $breakfast1['id']):?>
     <?php ?>
   <?php else: ?>
     <?php 
-    $form = '<a href="#" class="btn-sm" style="padding-left: 15px; padding-bottom: 10px;">Aready Included in Your Plan</a> ';
+    $form = '<a href="#" class="btn-sm" style="padding-left: 15px; padding-bottom: 10px;">Aready Included in Your Plan</a>';
     break; ?>
   <?php endif; ?>
   <?php endforeach;?>
   <?php echo $form; ?> 
 </div>
+<?php endforeach;?>
 
 <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
   <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">

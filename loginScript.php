@@ -21,7 +21,7 @@ if($_POST){
         }
     }else{
         $_SESSION['message'] = "User not found";
-        header('location: beforeyoulogin.php');
+        header('location: login.php');
         echo "User not found";
     }
     

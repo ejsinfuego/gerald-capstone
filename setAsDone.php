@@ -16,6 +16,7 @@ if($_POST){
     $user = $_SESSION['user_id'];
     //insert into achievement table
     $database->query("insert into achievement (user_id, goal_id, achievement_name, description, completion_date) values('$user', '$goal_id', '$goal_type', '$description', '$completion_date')");
+    
     header('location: healthgoal.php');
     //update goal table
 }

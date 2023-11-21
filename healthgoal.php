@@ -47,6 +47,8 @@ $done_meals = $database->query('SELECT * FROM achievement INNER JOIN goals ON ac
 
 <div class="container d-flex flex-wrap">
   <div class="section-title w-100" data-aos="fade-left">
+  <h1 style="font-family: roboto">Welcome, <?= $_SESSION['first_name']; ?> </h1>
+      <h1 style="font-family: roboto;">Your current BMI is  <?= $_SESSION['bmi']; ?></h1>
           <h2>These are your health goals so far.</h2>
           <p style = "font-size: larger;">These are the Health Goals: </p>
   </div>
@@ -88,7 +90,6 @@ $done_meals = $database->query('SELECT * FROM achievement INNER JOIN goals ON ac
    <?php endforeach;?>   
    <?= $button ?>
   </div>
-
   <?php endforeach; ?>
 
 
