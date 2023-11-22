@@ -8,7 +8,9 @@
   <section id="hero" class="d-flex align-items-center">
     <div class="container text-center position-relative" data-aos="fade-in" data-aos-delay="200">
       <h1 style="font-family: roboto">Welcome, <?= $_SESSION['first_name']; ?> </h1>
+      <?php if($_SESSION['usertype'] != 0): ?>
       <h1 style="font-family: roboto;">Your current BMI is  <?= $_SESSION['bmi']; ?></h1>
+      <?php endif; ?>
       <a onclick="openModal()" href="#" class="btn-get-started scrollto">Let's get your BMI first!</a>
     </div>
   </section><!-- End Hero -->

@@ -231,7 +231,12 @@ $workout_plan = $database->query('select * from user_activity_id where user_id =
 <h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4 font-size-bold">Workout</h5>
 <?php foreach($workout as $workout_day): ?>
   <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
-  <img src="assets/img/workout.jpg" class="card-img-top" alt="...">
+  <img src="<?php foreach($pictures as $key=>$picture){
+    if($key == $workout_day['activity_name']){
+      echo $picture;
+    }
+  }
+  ?>" class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($workout_day['activity_name']); ?></h5>
     <p class="card-text">Recommended work out for your body category</p>

@@ -11,6 +11,7 @@ if($_SESSION['user_id'] == null){
 $user = $database->query('SELECT * FROM user WHERE id = "'.$_SESSION['user_id'].'"');
 $user = $user->fetch_assoc();
 $_SESSION['first_name'] = $user['first_name'];
+$_SESSION['usertype'] = $user['user_type'];
 
 $category = $database->query("select * from health_metrics where user_id={$user['id']}");
 
@@ -25,6 +26,18 @@ if($category == 0){
   $category = $category['category_id'];
   
 }
+
+$Jogging = './assets/img/jogging.jpg';
+$Running = 'running';
+$Walking = 'walking';
+$Swimming = 'swimming';
+$Yoga = 'yoga';
+$Pushups = 'pushups';
+
+$pictures = array("Jogging"=>$Jogging, "Walking"=>$Walking, "Swimming"=>$Swimming, "Yoga"=>$Yoga, "Pushups"=>$Pushups);
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -189,6 +202,9 @@ if($category == 0){
               <input type="text" name="duration" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" placeholder="00:00">
               <label for="meals">Calories Burned</label>
               <input type="number" name="calories">
+              <!-- picture -->
+              <label for="picture">Picture</label>
+              <input type="file" name="picture" id="picture">
               
               <?php $categories = $database->query('select * from category'); ?>
               <label for="body_type">Recommended for what body type</label>

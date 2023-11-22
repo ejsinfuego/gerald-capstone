@@ -11,7 +11,6 @@ if($_POST){
     $duration = $_POST['duration'];
     $calories = $_POST['calories'];
     $cat = $_POST['body_type'];
-    
 
     $database->query("insert into exercise_activity (activity_name, intensity_level, duration, calories_burned, category_id) values('$name', '$intensity','$duration', '$calories','$cat')");
 
