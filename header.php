@@ -113,18 +113,10 @@ $pictures = array("Jogging"=>$Jogging, "Walking"=>$Walking, "Swimming"=>$Swimmin
             <li><a class="nav-link scrollto " href="healthgoal.php">Health Goal</a></li>
             <li><a class="nav-link scrollto" href="mealplanning.php">Meal Planning</a></li>
             <?php if($user['user_type'] == 0) : ?>
-            <li><a style="cursor: pointer" onclick="openAdmin()" class="nav-link scrollto">Add Meal Plan</a></li>
-        
-            <?php endif ?>
-              <ul>
-                
-                  <ul>
-                    
-                  </ul>
-                </li>
-                
-              </ul>
-            </li>
+            <li><a style="cursor: pointer" id="openModalLink" onclick="openAdmin()" class="nav-link scrollto">Add Meal Plan</a></li>
+              
+            <?php endif; ?>
+             
             <!-- <li><a class="nav-link scrollto" id="openModalLink">BMI Calculator</a></li> -->
             <form method="get" action="logout.php">
             <input style="border: none;" type="hidden" name="logout">
@@ -140,7 +132,7 @@ $pictures = array("Jogging"=>$Jogging, "Walking"=>$Walking, "Swimming"=>$Swimmin
     </div>
   </header><!-- End Header -->
 
-              <div id="modal">
+              <!-- <div id="modal">
               <button onclick="closeModal()" class="closeModal" id="closeModal">X</button>
               <h1>BMI Calculator</h1>
               <form method="post" action="savebmi.php">
@@ -159,11 +151,11 @@ $pictures = array("Jogging"=>$Jogging, "Walking"=>$Walking, "Swimming"=>$Swimmin
               </button>
               </form>
               <br>
-            </div>
+            </div> -->
 
             <!-- admin block -->
             <div id="admin">
-              <a style="cursor:pointer;" onclick="openWorkout()">Add Workout</a>
+              <button id="mealOrWOrk" style="cursor:pointer;" onclick="openWorkout()">Add Workout or Meal Plan</button>
               <div id="meal">
               <button onclick="closeAdmin()" class="closeModal" id="closeModal">X</button>
               <h1 onclick="openWorkout()">Add Meal Plan</h1>
@@ -192,7 +184,8 @@ $pictures = array("Jogging"=>$Jogging, "Walking"=>$Walking, "Swimming"=>$Swimmin
               
               <br>
               <div id="addWorkout" style="display: none;">
-              <h1 onclick="openWorkout()">Add Workout</h1>
+              <h1>Add Workout</h1>
+              <button onclick="closeAdmin()" class="closeModal" id="closeModal">X</button>
               <form method="post" action="newWorkout.php">
               <label for="actname">Activity Name</label>
               <input type="text" name="actname"><br>
@@ -255,14 +248,17 @@ $pictures = array("Jogging"=>$Jogging, "Walking"=>$Walking, "Swimming"=>$Swimmin
               
               const workout = document.getElementById("addWorkout");
               const meal = document.getElementById("meal");
+              const mealOrWork = document.getElementById("mealOrWork");
 
               function openWorkout(){
                 if(meal.style.display == "block"){
                   meal.style.display = "none";
                   workout.style.display = "block";
+                  this.innerHTML = "Add Meal Plan";
                 }else{
                   meal.style.display = "block";
                   workout.style.display = "none";
+                  this.innerHTML = "Add Work Out Plan";
                 }
                 
               }
