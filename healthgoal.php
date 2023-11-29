@@ -2,19 +2,32 @@
 
 include('header.php');
 
-//inner join from goals to meal_plans and to user table
-$plans = $database->query('SELECT goals.id, goals.user_id, goals.type_id, goals.type, goals.target_date, meal_plans.plan_name, meal_plans.daily_meal_schedule, meal_plans.portion_sizes FROM goals INNER JOIN meal_plans ON goals.type_id = meal_plans.id INNER JOIN user ON goals.user_id = user.id WHERE goals.user_id = "'.$_SESSION['user_id'].'"');
-$plans = $plans->fetch_all(MYSQLI_ASSOC);
+$workout = $database->query('select * from exercise_activity');
 
-//inner join from user_activity_id to exercise_activity table
-$workout = $database->query('SELECT * FROM workout_plans INNER JOIN exercise_activity ON workout_plans.exercise_id = exercise_activity.id WHERE workout_plans.user_id = "'.$_SESSION['user_id'].'"');
-$workout = $workout->fetch_all(MYSQLI_ASSOC);
+$plans = $database->query('select * from goals where user_id = '.$_SESSION['user_id'].'');
 
-//inner join achievement to user_activity_id to exercise_activity
-$done_workout = $database->query('SELECT * FROM user_activity_id INNER JOIN workout_plans ON user_activity_id.activity_id = workout_plans.exercise_id INNER JOIN exercise_activity ON workout_plans.exercise_id = exercise_activity.id WHERE user_activity_id.user_id ='.$_SESSION['user_id']);
-$done_workout = $done_workout->fetch_all(MYSQLI_ASSOC);
+$workout_plan = $database->query('select * from user_activity_id where user_id = '.$_SESSION['user_id'].'');
 
-$done_meals = $database->query('SELECT * FROM achievement INNER JOIN goals ON achievement.goal_id = goals.id INNER JOIN meal_plans ON goals.type_id = meal_plans.id where achievement.user_id ='.$_SESSION['user_id'])
+$day1_meal = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day1"');
+$day1_meal = $day1_meal->fetch_all(MYSQLI_ASSOC);
+
+$day2_meal = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day2"');
+$day2_meal = $day2_meal->fetch_all(MYSQLI_ASSOC);
+
+$day3_meal = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day3"');
+$day3_meal = $day3_meal->fetch_all(MYSQLI_ASSOC);
+
+$day4_meal = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day4"');
+$day4_meal = $day4_meal->fetch_all(MYSQLI_ASSOC);
+
+$day5_meal = $database->query('select * from meal_plans where category_id='.$category.' and daily_meal_schedule = "day5"');
+$day5_meal = $day5_meal->fetch_all(MYSQLI_ASSOC);
+
+
+$workout = $database->query('select * from workout_plans inner join exercise_activity on workout_plans.exercise_id = exercise_activity.id where workout_plans.category_id='.$category.'');
+
+
+
 ?>
 <style>
   .card-link{
@@ -42,99 +55,607 @@ $done_meals = $database->query('SELECT * FROM achievement INNER JOIN goals ON ac
   }
 </style>
 
-    <!-- ======= Portfolio Section ======= -->
+   <!-- ======= Portfolio Section ======= -->
   <section id="portfolio" data-aos="fade-up" class="portfolio" style="margin-top: 100px;">
-
-<div class="container d-flex flex-wrap">
+  <div class="text-center container">
+  <button class="btn start">Start your health journey!</button>
+  </div>
+      <div class="container d-flex flex-wrap">
   <div class="section-title w-100" data-aos="fade-left">
-  <h1 style="font-family: roboto">Welcome, <?= $_SESSION['first_name']; ?> </h1>
-      <h1 style="font-family: roboto;">Your current BMI is  <?= $_SESSION['bmi']; ?></h1>
-          <h2>These are your health goals so far.</h2>
+          <h2>Meal Recommendations</h2>
+          <p style = "font-size: larger;">These are recommendation according to your BMI : <i><strong><?= $_SESSION['bmi'] .' : ' . $_SESSION['cat']; ?></strong></i> </p>
           <p style = "font-size: larger;">These are the Health Goals: </p>
   </div>
+<div class="container">
+  <!-- ROW FOR DAY 1 MEAL -->
+   <div class="row">
+      <h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4">Day 1</h5>
+        <?php foreach($day1_meal as $day1): ?>
+              <?php if($day1['plan_name'] == 'breakfast'): ?>
+                <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+                <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day1['plan_name']); ?></h5>
+                  <p class="card-text">These are the meals recommended for this period</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                <?php $meals = explode("\n", $day1["portion_sizes"]); 
+                      foreach($meals as $meal):
+                ?>
+                  <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+                  <?php endforeach; ?>
+                </ul>
+                </div>    
+                <?php break; ?>
+              </div>
+              <?php endif; ?>  
+      <?php endforeach; ?>
 
-  <h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4">Day 1</h5>
-  <?php foreach($plans as $plan) :?>
-   
-  <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
-  <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($plan['plan_name']); ?></h5>
-    <p class="card-text">These are the meals recommended for this period</p>
-  </div>
-  <ul class="list-group list-group-flush">
-  <?php $meals = explode("\n", $plan["portion_sizes"]); 
-        foreach($meals as $meal):
-  ?>
-    <li class="list-group-item"><?php echo ucwords($meal); ?></li>
-    <?php endforeach; ?>
-  </ul
-  >  <ul class="list-group list-group-flush">
-    <li class="list-group-item">Target Date: <?php echo date('M d, Y', strtotime($plan['target_date'])) ; ?> </li>
-  
-  </ul>
-    <form method="post" action="setAsDone.php">
-    <input type="hidden" name="goal_id" value="<?= $plan['id'] ?>">
-    <input type="hidden" name="goal_type" value="meal">
-    <input type="hidden" name="description" value="<?= $plan['plan_name'] ?>">
-    <input type="hidden" name="completion_date" value="<?= date('Y-m-d') ?>">
-    <?php $button ='<button type="submit" class="btn card-link">
-    Mark as Done</button>
-   </form>'; 
-    foreach($done_meals as $done_meal) : ?> 
-    <?php 
-    if( $plan['type_id'] == $done_meal['type_id'] ) :
-    $button = '<p class"portfolio" style="margin-left: 20px; margin-top: 10px;">Completed on '.date('M d, Y', strtotime($done_meal['completion_date'])).'</p>';
-    break; ?>
-    <?php endif; ?>
-   <?php endforeach;?>   
-   <?= $button ?>
-  </div>
-  <?php endforeach; ?>
+      <?php foreach($day1_meal as $day1): ?>
+              <?php if($day1['plan_name'] == 'lunch'): ?>
+                <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+                <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day1['plan_name']); ?></h5>
+                  <p class="card-text">These are the meals recommended for this period</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                <?php $meals = explode("\n", $day1["portion_sizes"]); 
+                      foreach($meals as $meal):
+                ?>
+                  <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+                  <?php endforeach; ?>
+                </ul>
+                </div>    
+                <?php break; ?>
+              </div>
+              <?php endif; ?>  
+      <?php endforeach; ?>
 
+      <?php foreach($day1_meal as $day1): ?>
+        <?php if($day1['plan_name'] == 'snack'): ?>
+          <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+          <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day1['plan_name']); ?></h5>
+            <p class="card-text">These are the meals recommended for this period</p>
+          </div>
+          <ul class="list-group list-group-flush">
+          <?php $meals = explode("\n", $day1["portion_sizes"]); 
+                foreach($meals as $meal):
+          ?>
+            <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+            <?php endforeach; ?>
+          </ul>
+          </div>    
+          <?php break; ?>
+        </div>
+        <?php endif; ?>  
+      <?php endforeach; ?>
 
+      <?php foreach($day1_meal as $day1): ?>
+        <?php if($day1['plan_name'] == 'dinner'): ?>
+          <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+          <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day1['plan_name']); ?></h5>
+            <p class="card-text">These are the meals recommended for this period</p>
+          </div>
+          <ul class="list-group list-group-flush">
+          <?php $meals = explode("\n", $day1["portion_sizes"]); 
+                foreach($meals as $meal):
+          ?>
+            <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+            <?php endforeach; ?>
+          </ul>
+          </div>    
+          <?php break; ?>
+        </div>
+        <?php endif; ?>
+      <?php endforeach; ?>  
 
-
-
-
-<h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4 font-size-bold">Workout</h5>
-<?php  foreach($workout as $workout_day): ?>
-
-  <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
-  <img src="assets/img/workout.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($workout_day['activity_name']); ?></h5>
-    <p class="card-text">Recommended work out for your body category</p>
-  </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">Intensity Level: <?php echo ucfirst($workout_day['intensity_level']); ?> </li>
-  </ul>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">Duration: <?php echo date('G', strtotime($workout_day['duration'])). ' Hour/s'; ?> </li>
-  </ul>
- 
-  <div class="card-body">
-   <form method="post" action="setAsDoing.php">
-    <input type="hidden" name="activity_id" value="<?php echo $workout_day['exercise_id']; ?>">
-   <?php $submit= '<button type="submit" class="btn card-link">
-    Set as Doing</button>';
-    
-     foreach($done_workout as $workout): ?>
-    <?php if($workout_day['exercise_id'] == $workout['activity_id']): ?>
-      <?php if($workout['date_end'] != '0000-00-00 00:00:00'): ?>
-        <?php $submit = '<p class"portfolio" style="margin-left: 20px; margin-top: 10px;">Done</p>'; break; ?>
-      <?php endif; ?>
-      <input type="hidden" name="user_act_id" value="<?php echo $workout['user_activity_id']; ?>">
-        <input type='hidden' name='completion_date' value='<?php echo date('Y-m-d'); ?>'>
-    <?php
-      $submit = "<button type='submit' class='btn card-link'>Set As Done</button></form>"; break; ?>
-    <?php endif; ?>
-  <?php endforeach; ?>
-<?= $submit ?>
-</form>
 </div>
+<!-- END OF ROW FOR DAY 1 MEALS -->
+<!-- ROW FOR WORKOUT -->
+<div class="row">
+<h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4">Workout for Day 1</h5>
+      <?php foreach($workout as $exercise): ?>
+        <?php if($exercise['plan_name'] == 'day1'): ?>
+          <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+          <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($exercise['activity_name']); ?></h5>
+            <p class="card-text">These are the meals recommended for this period</p>
+          </div>
+          <ul class="list-group list-group-flush">
+          <?php $meals = explode("\n", $exercise["description"]); 
+                foreach($meals as $meal):
+          ?>
+            <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+            <?php endforeach; ?>
+          </ul>
+          </div>    
+          <?php break; ?>
+        </div>
+        <?php endif; ?>
+      <?php endforeach; ?>  
 </div>
-<?php endforeach; ?>
+<!-- END OF ROW FOR WORKOUT -->
+
+<!-- END ROW FOR DAY 1 -->
+
+<!-- ROW FOR DAY 2 MEAL -->
+<div class="row">
+      <h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4">Day 2</h5>
+        <?php foreach($day2_meal as $day2): ?>
+              <?php if($day2['plan_name'] == 'breakfast'): ?>
+                <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+                <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day2['plan_name']); ?></h5>
+                  <p class="card-text">These are the meals recommended for this period</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                <?php $meals = explode("\n", $day2["portion_sizes"]); 
+                      foreach($meals as $meal):
+                ?>
+                  <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+                  <?php endforeach; ?>
+                </ul>
+                </div>    
+                <?php break; ?>
+              </div>
+              <?php endif; ?>  
+      <?php endforeach; ?>
+
+      <?php foreach($day2_meal as $day2): ?>
+              <?php if($day2['plan_name'] == 'lunch'): ?>
+                <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+                <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day2['plan_name']); ?></h5>
+                  <p class="card-text">These are the meals recommended for this period</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                <?php $meals = explode("\n", $day2["portion_sizes"]); 
+                      foreach($meals as $meal):
+                ?>
+                  <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+                  <?php endforeach; ?>
+                </ul>
+                </div>    
+                <?php break; ?>
+              </div>
+              <?php endif; ?>  
+      <?php endforeach; ?>
+
+      <?php foreach($day2_meal as $day2): ?>
+        <?php if($day2['plan_name'] == 'snack'): ?>
+          <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+          <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day2['plan_name']); ?></h5>
+            <p class="card-text">These are the meals recommended for this period</p>
+          </div>
+          <ul class="list-group list-group-flush">
+          <?php $meals = explode("\n", $day2["portion_sizes"]); 
+                foreach($meals as $meal):
+          ?>
+            <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+            <?php endforeach; ?>
+          </ul>
+          </div>    
+          <?php break; ?>
+        </div>
+        <?php endif; ?>  
+      <?php endforeach; ?>
+
+      <?php foreach($day2_meal as $day2): ?>
+        <?php if($day2['plan_name'] == 'dinner'): ?>
+          <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+          <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day2['plan_name']); ?></h5>
+            <p class="card-text">These are the meals recommended for this period</p>
+          </div>
+          <ul class="list-group list-group-flush">
+          <?php $meals = explode("\n", $day2["portion_sizes"]); 
+                foreach($meals as $meal):
+          ?>
+            <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+            <?php endforeach; ?>
+          </ul>
+          </div>    
+          <?php break; ?>
+        </div>
+        <?php endif; ?>
+      <?php endforeach; ?>  
+
+</div>
+<!-- END OF ROW FOR DAY 2 MEALS -->
+<!-- ROW FOR WORKOUT -->
+<div class="row">
+<h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4">Workout for Day 2</h5>
+      <?php foreach($workout as $exercise): ?>
+        <?php if($exercise['plan_name'] == 'day2'): ?>
+          <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+          <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($exercise['activity_name']); ?></h5>
+            <p class="card-text">These are the meals recommended for this period</p>
+          </div>
+          <ul class="list-group list-group-flush">
+          <?php $meals = explode("\n", $exercise["description"]); 
+                foreach($meals as $meal):
+          ?>
+            <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+            <?php endforeach; ?>
+          </ul>
+          </div>    
+          <?php break; ?>
+        </div>
+        <?php endif; ?>
+      <?php endforeach; ?>  
+</div>
+<!-- END OF ROW FOR WORKOUT -->
+
+<!-- END ROW FOR DAY 2 -->
+
+
+<!-- ROW FOR DAY 3 MEAL -->
+  <div class="row">
+        <h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4">Day 3</h5>
+          <?php foreach($day3_meal as $day3): ?>
+                <?php if($day3['plan_name'] == 'breakfast'): ?>
+                  <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+                  <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day3['plan_name']); ?></h5>
+                    <p class="card-text">These are the meals recommended for this period</p>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                  <?php $meals = explode("\n", $day3["portion_sizes"]); 
+                        foreach($meals as $meal):
+                  ?>
+                    <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+                    <?php endforeach; ?>
+                  </ul>
+                  </div>    
+                  <?php break; ?>
+                </div>
+                <?php endif; ?>  
+        <?php endforeach; ?>
+
+        <?php foreach($day3_meal as $day3): ?>
+                <?php if($day3['plan_name'] == 'lunch'): ?>
+                  <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+                  <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day3['plan_name']); ?></h5>
+                    <p class="card-text">These are the meals recommended for this period</p>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                  <?php $meals = explode("\n", $day3["portion_sizes"]); 
+                        foreach($meals as $meal):
+                  ?>
+                    <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+                    <?php endforeach; ?>
+                  </ul>
+                  </div>    
+                  <?php break; ?>
+                </div>
+                <?php endif; ?>  
+        <?php endforeach; ?>
+
+        <?php foreach($day3_meal as $day3): ?>
+          <?php if($day3['plan_name'] == 'snack'): ?>
+            <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+            <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day3['plan_name']); ?></h5>
+              <p class="card-text">These are the meals recommended for this period</p>
+            </div>
+            <ul class="list-group list-group-flush">
+            <?php $meals = explode("\n", $day3["portion_sizes"]); 
+                  foreach($meals as $meal):
+            ?>
+              <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+              <?php endforeach; ?>
+            </ul>
+            </div>    
+            <?php break; ?>
+          </div>
+          <?php endif; ?>  
+        <?php endforeach; ?>
+
+        <?php foreach($day3_meal as $day3): ?>
+          <?php if($day3['plan_name'] == 'dinner'): ?>
+            <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+            <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day3['plan_name']); ?></h5>
+              <p class="card-text">These are the meals recommended for this period</p>
+            </div>
+            <ul class="list-group list-group-flush">
+            <?php $meals = explode("\n", $day3["portion_sizes"]); 
+                  foreach($meals as $meal):
+            ?>
+              <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+              <?php endforeach; ?>
+            </ul>
+            </div>    
+            <?php break; ?>
+          </div>
+          <?php endif; ?>
+        <?php endforeach; ?>  
+
+  </div>
+  <!-- END OF ROW FOR DAY 2 MEALS -->
+  <!-- ROW FOR WORKOUT -->
+  <div class="row">
+  <h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4">Workout for Day 3</h5>
+        <?php foreach($workout as $exercise): ?>
+          <?php if($exercise['plan_name'] == 'day3'): ?>
+            <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+            <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($exercise['activity_name']); ?></h5>
+              <p class="card-text">These are the meals recommended for this period</p>
+            </div>
+            <ul class="list-group list-group-flush">
+            <?php $meals = explode("\n", $exercise["description"]); 
+                  foreach($meals as $meal):
+            ?>
+              <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+              <?php endforeach; ?>
+            </ul>
+            </div>    
+            <?php break; ?>
+          </div>
+          <?php endif; ?>
+        <?php endforeach; ?>  
+  </div>
+  <!-- END OF ROW FOR WORKOUT -->
+
+<!-- END ROW FOR DAY 3 -->
+
+
+<!-- ROW FOR DAY 4 MEAL -->
+<div class="row">
+      <h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4">Day 4</h5>
+        <?php foreach($day4_meal as $day4): ?>
+              <?php if($day4['plan_name'] == 'breakfast'): ?>
+                <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+                <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day4['plan_name']); ?></h5>
+                  <p class="card-text">These are the meals recommended for this period</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                <?php $meals = explode("\n", $day4["portion_sizes"]); 
+                      foreach($meals as $meal):
+                ?>
+                  <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+                  <?php endforeach; ?>
+                </ul>
+                </div>    
+                <?php break; ?>
+              </div>
+              <?php endif; ?>  
+      <?php endforeach; ?>
+
+      <?php foreach($day4_meal as $day4): ?>
+              <?php if($day4['plan_name'] == 'lunch'): ?>
+                <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+                <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day4['plan_name']); ?></h5>
+                  <p class="card-text">These are the meals recommended for this period</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                <?php $meals = explode("\n", $day4["portion_sizes"]); 
+                      foreach($meals as $meal):
+                ?>
+                  <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+                  <?php endforeach; ?>
+                </ul>
+                </div>    
+                <?php break; ?>
+              </div>
+              <?php endif; ?>  
+      <?php endforeach; ?>
+
+      <?php foreach($day4_meal as $day4): ?>
+        <?php if($day4['plan_name'] == 'snack'): ?>
+          <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+          <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day4['plan_name']); ?></h5>
+            <p class="card-text">These are the meals recommended for this period</p>
+          </div>
+          <ul class="list-group list-group-flush">
+          <?php $meals = explode("\n", $day4["portion_sizes"]); 
+                foreach($meals as $meal):
+          ?>
+            <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+            <?php endforeach; ?>
+          </ul>
+          </div>    
+          <?php break; ?>
+        </div>
+        <?php endif; ?>  
+      <?php endforeach; ?>
+
+      <?php foreach($day4_meal as $day4): ?>
+        <?php if($day4['plan_name'] == 'dinner'): ?>
+          <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+          <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day4['plan_name']); ?></h5>
+            <p class="card-text">These are the meals recommended for this period</p>
+          </div>
+          <ul class="list-group list-group-flush">
+          <?php $meals = explode("\n", $day4["portion_sizes"]); 
+                foreach($meals as $meal):
+          ?>
+            <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+            <?php endforeach; ?>
+          </ul>
+          </div>    
+          <?php break; ?>
+        </div>
+        <?php endif; ?>
+      <?php endforeach; ?>  
+
+</div>
+<!-- END OF ROW FOR DAY 4 MEALS -->
+<!-- ROW FOR WORKOUT -->
+<div class="row">
+<h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4">Workout for Day 4</h5>
+      <?php foreach($workout as $exercise): ?>
+        <?php if($exercise['plan_name'] == 'day4'): ?>
+          <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+          <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($exercise['activity_name']); ?></h5>
+            <p class="card-text">These are the meals recommended for this period</p>
+          </div>
+          <ul class="list-group list-group-flush">
+          <?php $meals = explode("\n", $exercise["description"]); 
+                foreach($meals as $meal):
+          ?>
+            <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+            <?php endforeach; ?>
+          </ul>
+          </div>    
+          <?php break; ?>
+        </div>
+        <?php endif; ?>
+      <?php endforeach; ?>  
+</div>
+<!-- END OF ROW FOR WORKOUT -->
+
+<!-- END ROW FOR DAY 4 -->
+
+<!-- ROW FOR DAY 5 MEAL -->
+<div class="row">
+      <h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4">Day 5</h5>
+        <?php foreach($day5_meal as $day5): ?>
+              <?php if($day5['plan_name'] == 'breakfast'): ?>
+                <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+                <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day5['plan_name']); ?></h5>
+                  <p class="card-text">These are the meals recommended for this period</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                <?php $meals = explode("\n", $day5["portion_sizes"]); 
+                      foreach($meals as $meal):
+                ?>
+                  <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+                  <?php endforeach; ?>
+                </ul>
+                </div>    
+                <?php break; ?>
+              </div>
+              <?php endif; ?>  
+      <?php endforeach; ?>
+
+      <?php foreach($day5_meal as $day5): ?>
+              <?php if($day5['plan_name'] == 'lunch'): ?>
+                <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+                <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day5['plan_name']); ?></h5>
+                  <p class="card-text">These are the meals recommended for this period</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                <?php $meals = explode("\n", $day5["portion_sizes"]); 
+                      foreach($meals as $meal):
+                ?>
+                  <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+                  <?php endforeach; ?>
+                </ul>
+                </div>    
+                <?php break; ?>
+              </div>
+              <?php endif; ?>  
+      <?php endforeach; ?>
+
+      <?php foreach($day5_meal as $day5): ?>
+        <?php if($day5['plan_name'] == 'snack'): ?>
+          <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+          <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day5['plan_name']); ?></h5>
+            <p class="card-text">These are the meals recommended for this period</p>
+          </div>
+          <ul class="list-group list-group-flush">
+          <?php $meals = explode("\n", $day5["portion_sizes"]); 
+                foreach($meals as $meal):
+          ?>
+            <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+            <?php endforeach; ?>
+          </ul>
+          </div>    
+          <?php break; ?>
+        </div>
+        <?php endif; ?>  
+      <?php endforeach; ?>
+
+      <?php foreach($day5_meal as $day5): ?>
+        <?php if($day5['plan_name'] == 'dinner'): ?>
+          <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+          <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($day5['plan_name']); ?></h5>
+            <p class="card-text">These are the meals recommended for this period</p>
+          </div>
+          <ul class="list-group list-group-flush">
+          <?php $meals = explode("\n", $day5["portion_sizes"]); 
+                foreach($meals as $meal):
+          ?>
+            <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+            <?php endforeach; ?>
+          </ul>
+          </div>    
+          <?php break; ?>
+        </div>
+        <?php endif; ?>
+      <?php endforeach; ?>  
+
+</div>
+<!-- END OF ROW FOR DAY 5 MEALS -->
+<!-- ROW FOR WORKOUT -->
+<div class="row">
+<h5 style="font-family:Arial, sans-serif" class="card-title w-100 mb-4">Workout for Day 5 </h5>
+      <?php foreach($workout as $exercise): ?>
+        <?php if($exercise['plan_name'] == 'day5'): ?>
+          <div class="card mx-3" style="width: 18rem; font-family:Arial,sans-serif;">
+          <img src="assets/img/samlpe.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="font-family:Arial,sans-serif;" ><?php echo ucfirst($exercise['activity_name']); ?></h5>
+            <p class="card-text">These are the meals recommended for this period</p>
+          </div>
+          <ul class="list-group list-group-flush">
+          <?php $meals = explode("\n", $exercise["description"]); 
+                foreach($meals as $meal):
+          ?>
+            <li class="list-group-item"><?php echo ucwords($meal); ?></li>
+            <?php endforeach; ?>
+          </ul>
+          </div>    
+          <?php break; ?>
+        </div>
+        <?php endif; ?>
+      <?php endforeach; ?>  
+</div>
+<!-- END OF ROW FOR WORKOUT -->
+
+<!-- END ROW FOR DAY 4 -->
+
+</div>
+</section>
 
 
     <!-- ======= Testimonials Section ======= -->

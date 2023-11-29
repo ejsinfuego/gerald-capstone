@@ -13,7 +13,7 @@ $user = $user->fetch_assoc();
 $_SESSION['first_name'] = $user['first_name'];
 $_SESSION['usertype'] = $user['user_type'];
 
-$category = $database->query("select * from health_metrics where user_id={$user['id']}");
+$category = $database->query("select * from health_metrics inner join category on health_metrics.category_id = category.id where health_metrics.user_id={$user['id']}");
 
 
 
@@ -23,7 +23,9 @@ if($category == 0){
   $category = 0;
 }else{
   $_SESSION['bmi'] = $category['bmi'];
+  $_SESSION['cat'] = $category['category'];
   $category = $category['category_id'];
+  
   
 }
 

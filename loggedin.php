@@ -2,6 +2,11 @@
   include('header.php');
 
 
+  $cat = $database->query('select * from category where id = '.$category)->fetch_assoc();
+
+  
+
+
 
 ?>
   <!-- ======= Hero Section ======= -->
@@ -9,7 +14,7 @@
     <div class="container text-center position-relative" data-aos="fade-in" data-aos-delay="200">
       <h1 style="font-family: roboto">Welcome, <?= $_SESSION['first_name']; ?> </h1>
       <?php if($_SESSION['usertype'] != 0): ?>
-      <h1 style="font-family: roboto;">Your current BMI is  <?= $_SESSION['bmi']; ?></h1>
+      <h1 style="font-family: roboto;">Your current BMI is  <?= $_SESSION['bmi'] ; ?> and you are <?= $cat['category']; ?>.</h1>
       <?php endif; ?>
       <a onclick="openModal()" href="#" class="btn-get-started scrollto">Let's get your BMI first!</a>
     </div>
