@@ -1,6 +1,14 @@
 <?php
 
-include('header.php');
+session_start();
+if($_SESSION['usertype'] == 0){
+  header('Location: loggedin.php');
+  session_abort();
+}else{
+  session_abort();
+  include('header.php');
+}
+
 
 $workout = $database->query('select * from exercise_activity');
 

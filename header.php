@@ -112,7 +112,10 @@ $pictures = array("Jogging"=>$Jogging, "Walking"=>$Walking, "Swimming"=>$Swimmin
             <li><a class="nav-link scrollto active" href="loggedin.php">Home</a></li>
             <li><a class="nav-link scrollto" href="About.html">About</a></li>
             <li><a class="nav-link scrollto" href="you.php">You</a></li>
+            <?php if($user['user_type'] == 0) : ?>
+            <?php else: ?> 
             <li><a class="nav-link scrollto " href="healthgoal.php">Health Goal</a></li>
+            <?php endif; ?>
             <li><a class="nav-link scrollto" href="mealplanning.php">Meal Planning</a></li>
             <?php if($user['user_type'] == 0) : ?>
             <li><a style="cursor: pointer" id="openModalLink" onclick="openAdmin()" class="nav-link scrollto">Add Meal Plan</a></li>
