@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 29, 2023 at 08:51 AM
+-- Generation Time: Nov 29, 2023 at 01:54 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -45,7 +45,16 @@ INSERT INTO `achievement` (`id`, `user_id`, `achievement_name`, `description`, `
 (6, 2, 'meal', 'breakfast\n3 slices Raisin wheat bread \r\n2 pcs scrambled egg coffee with sugar ', '2023-10-25', 2),
 (18, 2, 'meal', 'lunch', '2023-10-26', 2),
 (28, 9, 'meal', 'lunch', '2023-10-26', 18),
-(32, 9, 'meal', 'breakfast', '2023-10-26', 21);
+(32, 9, 'meal', 'breakfast', '2023-10-26', 21),
+(34, 2, 'meal', 'breakfast', '2023-11-02', 5),
+(35, 2, 'meal', 'snack', '2023-11-02', 16),
+(36, 2, 'meal', 'snack', '2023-11-02', 16),
+(37, 2, 'meal', 'snack', '2023-11-02', 16),
+(38, 2, 'meal', 'snack', '2023-11-02', 16),
+(39, 2, 'meal', 'snack', '2023-11-02', 16),
+(40, 2, 'meal', 'snack', '2023-11-02', 16),
+(41, 2, 'meal', 'snack', '2023-11-02', 16),
+(42, 2, 'meal', 'snack', '2023-11-02', 16);
 
 -- --------------------------------------------------------
 
@@ -77,6 +86,7 @@ INSERT INTO `category` (`id`, `category`) VALUES
 CREATE TABLE `exercise_activity` (
   `id` int(11) NOT NULL,
   `activity_name` varchar(100) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
   `intensity_level` varchar(10) NOT NULL,
   `duration` time NOT NULL,
   `calories_burned` float NOT NULL,
@@ -87,12 +97,22 @@ CREATE TABLE `exercise_activity` (
 -- Dumping data for table `exercise_activity`
 --
 
-INSERT INTO `exercise_activity` (`id`, `activity_name`, `intensity_level`, `duration`, `calories_burned`, `category_id`) VALUES
-(1, 'Jogging', 'low', '01:00:00', 250, 1),
-(2, 'Jogging', 'normal', '02:00:00', 300, NULL),
-(3, 'Jogging', 'high', '00:00:03', 500, NULL),
-(4, 'Push Up', 'normal', '00:00:00', 0, NULL),
-(5, 'squat', 'low', '00:30:00', 200, 2);
+INSERT INTO `exercise_activity` (`id`, `activity_name`, `description`, `intensity_level`, `duration`, `calories_burned`, `category_id`) VALUES
+(1, 'Jogging', NULL, 'low', '01:00:00', 250, 1),
+(2, 'Jogging', NULL, 'normal', '00:20:00', 300, NULL),
+(3, 'Jogging', NULL, 'high', '00:00:03', 500, NULL),
+(4, 'Push Up', NULL, 'normal', '00:00:00', 0, NULL),
+(5, 'Squat', '3 sets of 12 reps\n45 sec rest\n', 'low', '00:00:00', 200, 2),
+(6, 'Jumping Jack', '3 sets of 20 reps\n30 sec rest', 'low', '00:20:00', 100, 2),
+(7, 'sample workout', NULL, 'low', '00:30:00', 100, 0),
+(8, 'One Leg Standing', '3 sets of 10 reps\r\n30 sec rest', '', '00:00:00', 0, NULL),
+(9, 'Arm Circle', '3 sets of 15 reps\r\n20 sec rest', '', '00:00:00', 0, NULL),
+(10, 'Chin Up', '3 sets of 5 reps\r\n60 sec rest', '', '00:00:00', 0, NULL),
+(11, 'Stair Climbing', '', '', '00:15:00', 0, NULL),
+(12, 'One Leg Standing', '3 sets of 10 reps\r\n30 sec rest', '', '00:00:00', 0, NULL),
+(13, 'Arm Circle', '3 sets of 15 reps\r\n20 sec rest', '', '00:00:00', 0, NULL),
+(14, 'Chin Up', '3 sets of 5 reps\r\n60 sec rest', '', '00:00:00', 0, NULL),
+(15, 'Stair Climbing', '', '', '00:15:00', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -127,7 +147,8 @@ INSERT INTO `goals` (`id`, `user_id`, `type_id`, `type`, `target_metrics`, `targ
 (22, 9, 31, 'meal', NULL, '2023-10-28', NULL),
 (23, 9, 2, 'meal', NULL, '2023-10-31', NULL),
 (24, 9, 2, 'meal', NULL, '2023-10-30', NULL),
-(25, 9, 2, 'meal', NULL, '2023-10-29', NULL);
+(25, 9, 2, 'meal', NULL, '2023-10-29', NULL),
+(26, 11, 37, 'meal', NULL, '2023-10-31', NULL);
 
 -- --------------------------------------------------------
 
@@ -155,7 +176,9 @@ INSERT INTO `health_metrics` (`id`, `user_id`, `height`, `weight`, `age`, `bmi`,
 (4, 9, 165, 45, NULL, 16.5289, 1),
 (5, 10, 165, 45, NULL, 16.5289, 1),
 (6, 11, 165, 45, NULL, 16.5289, 1),
-(7, 12, 165, 45, NULL, 16.5289, 1);
+(7, 12, 165, 45, NULL, 16.5289, 1),
+(8, 13, 16, 45, NULL, 1757.81, 5),
+(9, 14, 165, 45, NULL, 16.5289, 1);
 
 -- --------------------------------------------------------
 
@@ -214,7 +237,10 @@ INSERT INTO `meal_plans` (`id`, `user_id`, `plan_name`, `daily_meal_schedule`, `
 (37, NULL, 'breakfast', 'day1', '3 slices Raisin wheat bread \r\n2 pcs scrambled egg coffee with sugar ', 1),
 (39, NULL, 'breakfast', 'day5', '1 egg\r\n1 rice', 4),
 (40, NULL, 'breakfast', 'day6', '1 rice\r\n1 potato', 2),
-(41, NULL, 'breakfast', 'day7', '1 rice\r\n1 peace', 4);
+(41, NULL, 'breakfast', 'day7', '1 rice\r\n1 peace', 4),
+(42, NULL, 'breakfast', '6', '1 egg\r\n1 rice', 2),
+(43, NULL, 'breakfast', 'day8', '1 sweet potato\r\n1 cup milk', 5),
+(44, NULL, 'breakfast', 'day1', '1 egg\r\n1 Rice', 1);
 
 -- --------------------------------------------------------
 
@@ -261,8 +287,10 @@ INSERT INTO `user` (`id`, `first_name`, `last_name`, `age`, `gender`, `date_of_b
 (5, 'admin', 'test', NULL, 'male', '2023-10-31', 'admin@mail.com', NULL, NULL, 'password', NULL, 0),
 (9, 'Maria', 'Mercedes', 22, 'female', NULL, 'maria@mail.com', '                                        sample address', 987654321, 'password', NULL, 1),
 (10, 'Ej', 'Sinfuego', NULL, 'male', NULL, 'ej@mail.com', 'sample address', NULL, 'password', NULL, 1),
-(11, 'Sample', 'User', 45, 'male', NULL, 'sample@mail.com', '                                                                                                                                                                                                        sample', 2147483647, 'password', NULL, 1),
-(12, 'New', 'User', 45, 'male', NULL, 'new@mail.com', 'smaple ddress', 9123459879, 'password', NULL, 1);
+(11, 'Sample', 'User', 45, 'male', NULL, 'sample@mail.com', '                                                                                                                                                                                                                                                sample', 9123459879, 'password', NULL, 1),
+(12, 'New', 'User', 45, 'male', NULL, 'new@mail.com', 'smaple ddress', 9123459879, 'password', NULL, 1),
+(13, 'Sample', 'User', NULL, 'male', NULL, 'email@mail.com', 'adderss', NULL, 'password', NULL, 1),
+(14, 'Hird', 'User', NULL, 'male', NULL, 'user@mail.com', 'smaple ddress', NULL, 'password', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -287,7 +315,9 @@ INSERT INTO `user_activity_id` (`user_activity_id`, `activity_id`, `user_id`, `d
 (2, 1, 2, '2023-10-28 00:00:00', '2023-10-26 00:00:00'),
 (4, 2, 9, '2023-10-26 00:00:00', '2023-10-26 00:00:00'),
 (14, 1, 9, '2023-10-26 00:00:00', '2023-10-26 00:00:00'),
-(15, 3, 9, '2023-10-26 00:00:00', '2023-10-26 00:00:00');
+(15, 3, 9, '2023-10-26 00:00:00', '2023-10-26 00:00:00'),
+(16, 3, 2, '2023-11-02 00:00:00', '0000-00-00 00:00:00'),
+(17, 4, 2, '2023-11-02 00:00:00', '2023-11-02 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -310,10 +340,36 @@ CREATE TABLE `workout_plans` (
 --
 
 INSERT INTO `workout_plans` (`id`, `user_id`, `plan_name`, `description`, `duration`, `exercise_id`, `category_id`) VALUES
-(1, 9, '', '', '', 2, NULL),
-(2, 9, '', '', '', 1, NULL),
-(3, 9, '', '', '', 3, NULL),
-(4, 9, '', '', '', 5, NULL);
+(1, NULL, 'day1', '', '', 12, 1),
+(2, NULL, 'day2', '', '', 9, 1),
+(3, NULL, 'day3', '', '', 5, 1),
+(4, NULL, 'day4', '', '', 14, 1),
+(6, NULL, 'day5', '', '', 15, 1),
+(7, NULL, 'day1', '', '', 2, 2),
+(8, NULL, 'day2', '', '', 15, 2),
+(9, NULL, 'day3', '', '', 10, 2),
+(10, NULL, 'day4', '', '', 6, 2),
+(11, NULL, 'day5', '', '', 9, 2),
+(12, NULL, 'day1', '', '', 5, 4),
+(13, 0, 'day2', '', '', 10, 4),
+(14, 0, 'day3', '', '', 6, 4),
+(15, 0, 'day4', '', '', 13, 4),
+(16, 0, 'day5', '', '', 13, 4),
+(17, NULL, 'day1', '', '', 5, 4),
+(18, 0, 'day2', '', '', 10, 4),
+(19, 0, 'day3', '', '', 6, 4),
+(20, 0, 'day4', '', '', 13, 4),
+(21, 0, 'day5', '', '', 13, 4),
+(22, NULL, 'day1', '', '', 11, 5),
+(23, NULL, 'day2', '', '', 5, 5),
+(24, NULL, 'day3', '', '', 8, 5),
+(25, NULL, 'day4', '', '', 9, 5),
+(26, NULL, 'day5', '', '', 8, 5),
+(27, NULL, 'day1', '', '', 11, 5),
+(28, NULL, 'day2', '', '', 5, 5),
+(29, NULL, 'day3', '', '', 8, 5),
+(30, NULL, 'day4', '', '', 9, 5),
+(31, NULL, 'day5', '', '', 8, 5);
 
 --
 -- Indexes for dumped tables
@@ -394,7 +450,7 @@ ALTER TABLE `workout_plans`
 -- AUTO_INCREMENT for table `achievement`
 --
 ALTER TABLE `achievement`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -406,25 +462,25 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `exercise_activity`
 --
 ALTER TABLE `exercise_activity`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `goals`
 --
 ALTER TABLE `goals`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `health_metrics`
 --
 ALTER TABLE `health_metrics`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `meal_plans`
 --
 ALTER TABLE `meal_plans`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `recipes`
@@ -436,19 +492,19 @@ ALTER TABLE `recipes`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `user_activity_id`
 --
 ALTER TABLE `user_activity_id`
-  MODIFY `user_activity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `user_activity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `workout_plans`
 --
 ALTER TABLE `workout_plans`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
